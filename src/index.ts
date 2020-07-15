@@ -75,19 +75,17 @@ class Sensibo implements AccessoryPlugin {
 
                     // Assume centigrade, or switch on result.temperatureUnit?
                     let temperature = result.measurements.temperature;
-                    callback(null, temperature)
-                    return;
+                    callback(undefined, temperature)
                 }
                 catch (err) {
                     callback(err)
-                    return;
                 }
             });
 
         this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.CurrentHeaterCoolerState)
             .on(CharacteristicEventTypes.GET, (callback: CharacteristicGetCallback) => {
                 log.info("Current mode of AC was returned: " + (this.currentHeaterCoolerState == this.api.hap.Characteristic.CurrentHeaterCoolerState.INACTIVE ? "Inactive" : "~"));
-                callback(null, this.currentHeaterCoolerState)
+                callback(undefined, this.currentHeaterCoolerState)
             });
 
         this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.TargetHeaterCoolerState)
@@ -99,7 +97,7 @@ class Sensibo implements AccessoryPlugin {
             })
             .on(CharacteristicEventTypes.GET, (callback: CharacteristicGetCallback) => {
                 log.info("Target mode of AC was returned: " + (this.targetHeaterCoolerState == this.api.hap.Characteristic.TargetHeaterCoolerState.COOL ? "COOL" : "HEAT"));
-                callback(null, this.targetHeaterCoolerState)
+                callback(undefined, this.targetHeaterCoolerState)
             })
             .on(CharacteristicEventTypes.SET, (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
                 this.targetHeaterCoolerState = value as number;
