@@ -47,8 +47,6 @@ class Sensibo implements AccessoryPlugin {
             .setCharacteristic(this.api.hap.Characteristic.Manufacturer, "Custom Manufacturer")
             .setCharacteristic(this.api.hap.Characteristic.Model, "Custom Model");
 
-        this.active = false;
-
         this.heaterCoolerService = new this.api.hap.Service.HeaterCooler(this.name);
         this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.Active)
             .on(CharacteristicEventTypes.GET, (callback: CharacteristicGetCallback) => {
@@ -56,7 +54,7 @@ class Sensibo implements AccessoryPlugin {
                 callback(undefined, this.active);
             })
             .on(CharacteristicEventTypes.SET, (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                this.active = value as boolean;
+                this.active = value as number;
                 log.info("Current state of AC was set: " + (this.active ? "ON" : "OFF"));
                 callback();
             });
@@ -90,7 +88,7 @@ class Sensibo implements AccessoryPlugin {
                 callback(null, this.targetHeaterCoolerState)
             })
             .on(CharacteristicEventTypes.SET, (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                this.targetHeaterCoolerState = value;
+                this.targetHeaterCoolerState = value as number;
                 log.info("Target mode of AC was set: " + (this.targetHeaterCoolerState == this.api.hap.Characteristic.TargetHeaterCoolerState.COOL ? "COOL" : "HEAT"));
                 callback()
             });
