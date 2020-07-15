@@ -71,7 +71,7 @@ class Sensibo implements AccessoryPlugin {
                 log.info("Current temperature of AC was requested");
 
                 try {
-                    const response = await got(`https://home.sensibo.com/api/v2/pods/${this.id}?fields=*`);
+                    const response = await got(`https://home.sensibo.com/api/v2/pods/${this.id}?apiKey=${this.apiKey}&fields=*`);
                     log.info("Response: " + response.body);
 
                     var temp = 0;
