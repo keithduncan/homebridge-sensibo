@@ -28,6 +28,9 @@
   "bugs": {
     "url": "http://github.com/keithduncan/sensibo-homebridge/issues"
   },
+  "dependencies": {
+    "got": "^11.5.0"
+  },
   "devDependencies": {
     "@types/node": "10.17.19",
     "typescript": "^3.8.3",

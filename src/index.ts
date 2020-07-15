@@ -11,6 +11,8 @@ import {
   Service
 } from "homebridge";
 
+const got = require("got");
+
 let hap: HAP;
 
 module.exports = (api: API) => {
