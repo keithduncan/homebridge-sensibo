@@ -55,9 +55,7 @@ class Sensibo implements AccessoryPlugin {
 
                 try {
                     let result = await this.fetchRemoteDevice(["acState"]);
-
-                    let active = result.acState.on;
-                    callback(undefined, active);
+                    callback(undefined, result.acState.on);
                 }
                 catch (err) {
                     this.log.error(`Active GET error ${err}`);
@@ -68,15 +66,7 @@ class Sensibo implements AccessoryPlugin {
                 log.info("Current state of AC was set: " + (value ? "ON" : "OFF"));
 
                 try {
-                    const property = "on";
-                    const response = await got(`https://home.sensibo.com/api/v2/pods/${this.id}/acStates/${property}?apiKey=${this.apiKey}`, {
-                        json: {
-                            'newValue': value as boolean
-                        },
-                        method: 'PATCH',
-                    });
-                    this.log.info("Response: " + response.body);
-
+                    await this.patchRemoteDevice("on", value)
                     callback()
                 }
                 catch (err) {
@@ -189,6 +179,25 @@ class Sensibo implements AccessoryPlugin {
             apiFields = fields.join(",");
         }
         const response = await got(`https://home.sensibo.com/api/v2/pods/${this.id}?apiKey=${this.apiKey}&fields=${apiFields}`);
+        this.log.info("Response: " + response.body);
+
+        let json = JSON.parse(response.body);
+        if (json.status != "success") {
+            throw "Response `status` was not success";
+        }
+
+        let result = json.result;
+        return result;
+    }
+
+    async patchRemoteDevice(field: String, value: Any) {
+        const response = await got(`https://home.sensibo.com/api/v2/pods/${this.id}/acStates/${field}?apiKey=${this.apiKey}`, {
+            method: 'PATCH',
+            json: {
+                'newValue': value
+            },
+            responseType: 'json',
+        });
         this.log.info("Response: " + response.body);
 
         let json = JSON.parse(response.body);
