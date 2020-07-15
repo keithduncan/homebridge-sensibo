@@ -11,7 +11,10 @@ import {
   Service
 } from "homebridge";
 
+let hap: HAP;
+
 module.exports = (api: API) => {
+    hap = api.hap;
     api.registerAccessory("Sensibo", Sensibo);
 };
 
@@ -24,9 +27,9 @@ class Sensibo implements AccessoryPlugin {
     private readonly apiKey: string;
     private readonly id: string;
     
-    private active = Characteristic.Active.ACTIVE;
-    private currentHeaterCoolerState = Characteristic.CurrentHeaterCoolerState.INACTIVE; // COOLING, HEATING
-    private targetHeaterCoolerState = Characteristic.TargetHeaterCoolerState.COOL; // HEAT
+    private active = hap.Characteristic.Active.ACTIVE;
+    private currentHeaterCoolerState = hap.Characteristic.CurrentHeaterCoolerState.INACTIVE; // COOLING, HEATING
+    private targetHeaterCoolerState = hap.Characteristic.TargetHeaterCoolerState.COOL; // HEAT
     private targetTemperature: number = 20;
 
     private readonly heaterCoolerService: Service;
