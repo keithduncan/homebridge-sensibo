@@ -60,6 +60,7 @@ class Sensibo implements AccessoryPlugin {
                     callback(undefined, active);
                 }
                 catch (err) {
+                    this.log.error(`Active GET error ${err}`);
                     callback(err)
                 }
             })
@@ -79,6 +80,7 @@ class Sensibo implements AccessoryPlugin {
                     callback()
                 }
                 catch (err) {
+                    this.log.error(`Active SET error ${err}`);
                     callback(err)
                 }
             });
