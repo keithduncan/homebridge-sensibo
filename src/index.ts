@@ -1,14 +1,35 @@
-"use strict";
+import {
+  AccessoryConfig,
+  AccessoryPlugin,
+  API,
+  CharacteristicEventTypes,
+  CharacteristicGetCallback,
+  CharacteristicSetCallback,
+  CharacteristicValue,
+  HAP,
+  Logging,
+  Service
+} from "homebridge";
 
-let hap;
+let hap: HAP;
 
-module.exports = (api) => {
+module.exports = (api: API) => {
     hap = api.hap;
     api.registerAccessory("Sensibo", Sensibo);
 };
 
-class Sensibo {
-    constructor(log, config, api) {
+class Sensibo implements AccessoryPlugin {
+
+    private readonly log: Logging;
+    private readonly name: string;
+    private readonly apiKey: string;
+    private readonly id: string;
+    private active = false;
+
+    private readonly heaterCoolerService: Service;
+    private readonly informationService: Service;
+
+    constructor(log: Logging, config: AccessoryConfig, api: API) {
         this.log = log;
         this.name = config.name;
 
