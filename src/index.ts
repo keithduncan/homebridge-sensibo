@@ -68,11 +68,19 @@ class Sensibo implements AccessoryPlugin {
                 minStep: 0.1
             })
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
-		log.info("Current temperature of AC was requested");
-		const response = await got(`https://home.sensibo.com/api/v2/pods/${this.id}?fields=*`);
-		log.info("Response: " + response.body);
-                var temp = 0;
-                callback(null, temp)
+                log.info("Current temperature of AC was requested");
+
+                try {
+                    const response = await got(`https://home.sensibo.com/api/v2/pods/${this.id}?fields=*`);
+                    log.info("Response: " + response.body);
+
+                    var temp = 0;
+                    callback(null, temp)
+                }
+                catch (err) {
+                    callback(err)
+                    return;
+                }
             });
 
         this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.CurrentHeaterCoolerState)
