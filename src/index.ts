@@ -51,11 +51,11 @@ class Sensibo implements AccessoryPlugin {
 
         this.heaterCoolerService = new this.api.hap.Service.HeaterCooler(this.name);
         this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.Active)
-            .on('get', (callback: CharacteristicGetCallback) => {
+            .on(CharacteristicEventTypes.GET, (callback: CharacteristicGetCallback) => {
                 log.info("Current state of AC was returned: " + (this.active ? "ON" : "OFF"));
                 callback(undefined, this.active);
             })
-            .on('set', (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
+            .on(CharacteristicEventTypes.SET, (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
                 this.active = value as boolean;
                 log.info("Current state of AC was set: " + (this.active ? "ON" : "OFF"));
                 callback();
@@ -67,13 +67,13 @@ class Sensibo implements AccessoryPlugin {
                 maxValue: 100,
                 minStep: 0.1
             })
-            .on('get', (callback: CharacteristicGetCallback) => {
+            .on(CharacteristicEventTypes.GET, (callback: CharacteristicGetCallback) => {
                 var temp = 0;
                 callback(null, temp)
             });
 
         this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.CurrentHeaterCoolerState)
-            .on('get', (callback: CharacteristicGetCallback) => {
+            .on(CharacteristicEventTypes.GET, (callback: CharacteristicGetCallback) => {
                 log.info("Current mode of AC was returned: " + (this.currentHeaterCoolerState == this.api.hap.Characteristic.CurrentHeaterCoolerState.INACTIVE ? "Inactive" : "~"));
                 callback(null, this.currentHeaterCoolerState)
             });
@@ -85,47 +85,47 @@ class Sensibo implements AccessoryPlugin {
                     this.api.hap.Characteristic.TargetHeaterCoolerState.HEAT
                 ]
             })
-            .on('get', (callback: CharacteristicGetCallback) => {
+            .on(CharacteristicEventTypes.GET, (callback: CharacteristicGetCallback) => {
                 log.info("Target mode of AC was returned: " + (this.targetHeaterCoolerState == this.api.hap.Characteristic.TargetHeaterCoolerState.COOL ? "COOL" : "HEAT"));
                 callback(null, this.targetHeaterCoolerState)
             })
-            .on('set', (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
+            .on(CharacteristicEventTypes.SET, (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
                 this.targetHeaterCoolerState = value;
                 log.info("Target mode of AC was set: " + (this.targetHeaterCoolerState == this.api.hap.Characteristic.TargetHeaterCoolerState.COOL ? "COOL" : "HEAT"));
                 callback()
             });
 
         this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.CoolingThresholdTemperature)
-                .setProps({
-                    minValue: 18,
-                    maxValue: 32,
-                    minStep: 1
-                })
-                .on('get', (callback: CharacteristicGetCallback) => {
-                    log.info("Cooling threshold of AC was returned: " + this.targetTemperature);
-                    callback(undefined, this.targetTemperature)
-                })
-                .on('set', (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                    this.targetTemperature = value as number;
-                    log.info("Cooling threshold of AC was set: " + this.targetTemperature);
-                    callback()
-                });
+            .setProps({
+                minValue: 18,
+                maxValue: 32,
+                minStep: 1
+            })
+            .on(CharacteristicEventTypes.GET, (callback: CharacteristicGetCallback) => {
+                log.info("Cooling threshold of AC was returned: " + this.targetTemperature);
+                callback(undefined, this.targetTemperature)
+            })
+            .on(CharacteristicEventTypes.SET, (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
+                this.targetTemperature = value as number;
+                log.info("Cooling threshold of AC was set: " + this.targetTemperature);
+                callback()
+            });
 
         this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.HeatingThresholdTemperature)
-                .setProps({
-                    minValue: 10,
-                    maxValue: 30,
-                    minStep: 1
-                })
-                .on('get', (callback: CharacteristicGetCallback) => {
-                    log.info("Heating threshold of AC was returned: " + this.targetTemperature);
-                    callback(undefined, this.targetTemperature)
-                })
-                .on('set', (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                    this.targetTemperature = value as number;
-                    log.info("Heating threshold of AC was set: " + this.targetTemperature);
-                    callback()
-                });
+            .setProps({
+                minValue: 10,
+                maxValue: 30,
+                minStep: 1
+            })
+            .on(CharacteristicEventTypes.GET, (callback: CharacteristicGetCallback) => {
+                log.info("Heating threshold of AC was returned: " + this.targetTemperature);
+                callback(undefined, this.targetTemperature)
+            })
+            .on(CharacteristicEventTypes.SET, (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
+                this.targetTemperature = value as number;
+                log.info("Heating threshold of AC was set: " + this.targetTemperature);
+                callback()
+            });
 
         log.info("AC finished initializing!");
     }
