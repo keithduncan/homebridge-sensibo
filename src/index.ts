@@ -40,7 +40,7 @@ class Sensibo implements AccessoryPlugin {
         this.apiKey = config.apiKey;
         this.id = config.id;
 
-        this.informationService = new this.api.this.api.hap.Service.AccessoryInformation()
+        this.informationService = new this.api.hap.Service.AccessoryInformation()
             .setCharacteristic(this.api.hap.Characteristic.Manufacturer, "Custom Manufacturer")
             .setCharacteristic(this.api.hap.Characteristic.Model, "Custom Model");
 
