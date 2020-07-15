@@ -29,7 +29,6 @@ class Sensibo implements AccessoryPlugin {
     private readonly apiKey: string;
     private readonly id: string;
     
-    private active = hap.Characteristic.Active.ACTIVE;
     private currentHeaterCoolerState = hap.Characteristic.CurrentHeaterCoolerState.INACTIVE; // COOLING, HEATING
     private targetHeaterCoolerState = hap.Characteristic.TargetHeaterCoolerState.COOL; // HEAT
     private targetTemperature: number = 20;
@@ -51,14 +50,37 @@ class Sensibo implements AccessoryPlugin {
 
         this.heaterCoolerService = new this.api.hap.Service.HeaterCooler(this.name);
         this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.Active)
-            .on(CharacteristicEventTypes.GET, (callback: CharacteristicGetCallback) => {
-                log.info("Current state of AC was returned: " + (this.active ? "ON" : "OFF"));
-                callback(undefined, this.active);
+            .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
+                log.info("Current state of AC was requested");
+
+                try {
+                    let result = this.fetchRemoteDevice(["acState"]);
+
+                    let active = result.acState.on;
+                    callback(undefined, active);
+                }
+                catch (err) {
+                    callback(err)
+                }
             })
-            .on(CharacteristicEventTypes.SET, (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                this.active = value as number;
+            .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
                 log.info("Current state of AC was set: " + (this.active ? "ON" : "OFF"));
-                callback();
+
+                try {
+                    const property = "on";
+                    const response = await got(`https://home.sensibo.com/api/v2/pods/${this.id}/acStates/${property}?apiKey=${this.apiKey}`, {
+                        json: {
+                            'newValue': value as boolean
+                        },
+                        method: 'PATCH',
+                    });
+                    this.log.info("Response: " + response.body);
+
+                    callback()
+                }
+                catch (err) {
+                    callback(err)
+                }
             });
 
         this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.CurrentTemperature)
