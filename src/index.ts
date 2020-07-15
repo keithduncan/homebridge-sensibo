@@ -26,9 +26,9 @@ class Sensibo implements AccessoryPlugin {
     private readonly apiKey: string;
     private readonly id: string;
     
-    private active = false;
-    private currentHeaterCoolerState: HAP.Characteristic.CurrentHeaterCoolerState = HAP.Characteristic.CurrentHeaterCoolerState.INACTIVE; // COOLING, HEATING
-    private targetHeaterCoolerState: HAP.Characteristic.TargetHeaterCoolerState = HAP.Characteristic.TargetHeaterCoolerState.COOL; // HEAT
+    private active: Characteristic.Active = ACTIVE;
+    private currentHeaterCoolerState: Characteristic.CurrentHeaterCoolerState = Characteristic.CurrentHeaterCoolerState.INACTIVE; // COOLING, HEATING
+    private targetHeaterCoolerState: Characteristic.TargetHeaterCoolerState = Characteristic.TargetHeaterCoolerState.COOL; // HEAT
     private targetTemperature: float = 20;
 
     private readonly heaterCoolerService: Service;
@@ -55,7 +55,7 @@ class Sensibo implements AccessoryPlugin {
             })
             .on('set', (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
                 this.active = value as boolean;
-                log.info("Current state of AC was set: " + (this.switchOn ? "ON" : "OFF"));
+                log.info("Current state of AC was set: " + (this.active ? "ON" : "OFF"));
                 callback();
             });
 
@@ -132,7 +132,7 @@ class Sensibo implements AccessoryPlugin {
      * This method is optional to implement. It is called when HomeKit ask to identify the accessory.
      * Typical this only ever happens at the pairing process.
      */
-    identify() {
+    identify(): void {
         this.log("Identify!");
     }
 
@@ -140,7 +140,7 @@ class Sensibo implements AccessoryPlugin {
      * This method is called directly after creation of this instance.
      * It should return all services which should be added to the accessory.
      */
-    getServices() {
+    getServices(): Service[] {
         return [
             this.informationService,
             this.heaterCoolerService,
