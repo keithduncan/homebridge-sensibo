@@ -74,8 +74,18 @@ class Sensibo implements AccessoryPlugin {
                     const response = await got(`https://home.sensibo.com/api/v2/pods/${this.id}?apiKey=${this.apiKey}&fields=*`);
                     log.info("Response: " + response.body);
 
-                    var temp = 0;
-                    callback(null, temp)
+                    let json = JSON.parse(response.body);
+                    if (json.status != "success") {
+                        callback("Response `status` was not success");
+                        return;
+                    }
+
+                    let result = json.result;
+                    // Assume centigrade, or switch on result.temperatureUnit?
+                    let temperature = result.measurements.temperature;
+
+                    callback(null, temperature)
+                    return;
                 }
                 catch (err) {
                     callback(err)
