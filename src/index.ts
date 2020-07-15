@@ -70,7 +70,7 @@ class Sensibo implements AccessoryPlugin {
                     callback()
                 }
                 catch (err) {
-                    this.log.error(`Active SET error ${err}`);
+                    this.log.error(`Active SET error ${err} ${err.options}`);
                     callback(err)
                 }
             });
@@ -195,8 +195,7 @@ class Sensibo implements AccessoryPlugin {
             method: 'PATCH',
             json: {
                 'newValue': value
-            },
-            responseType: 'json',
+            }
         });
         this.log.info("Response: " + response.body);
 
