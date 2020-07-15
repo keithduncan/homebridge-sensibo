@@ -21,10 +21,15 @@ module.exports = (api: API) => {
 class Sensibo implements AccessoryPlugin {
 
     private readonly log: Logging;
+
     private readonly name: string;
     private readonly apiKey: string;
     private readonly id: string;
+    
     private active = false;
+    private currentHeaterCoolerState: HAP.Characteristic.CurrentHeaterCoolerState = HAP.Characteristic.CurrentHeaterCoolerState.INACTIVE; // COOLING, HEATING
+    private targetHeaterCoolerState: HAP.Characteristic.TargetHeaterCoolerState = HAP.Characteristic.TargetHeaterCoolerState.COOL; // HEAT
+    private targetTemperature: float = 20;
 
     private readonly heaterCoolerService: Service;
     private readonly informationService: Service;
@@ -44,12 +49,12 @@ class Sensibo implements AccessoryPlugin {
 
         this.heaterCoolerService = new hap.Service.HeaterCooler(this.name);
         this.heaterCoolerService.getCharacteristic(hap.Characteristic.Active)
-            .on('get', (callback) => {
+            .on('get', (callback: CharacteristicGetCallback) => {
                 log.info("Current state of AC was returned: " + (this.active ? "ON" : "OFF"));
                 callback(undefined, this.active);
             })
-            .on('set', (value, callback) => {
-                this.active = value;
+            .on('set', (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
+                this.active = value as boolean;
                 log.info("Current state of AC was set: " + (this.switchOn ? "ON" : "OFF"));
                 callback();
             });
@@ -60,22 +65,16 @@ class Sensibo implements AccessoryPlugin {
                 maxValue: 100,
                 minStep: 0.1
             })
-            .on('get', (callback) => {
+            .on('get', (callback: CharacteristicGetCallback) => {
                 var temp = 0;
                 callback(null, temp)
             });
 
-        this.currentHeaterCoolerState = hap.Characteristic.CurrentHeaterCoolerState.INACTIVE;
-        // hap.Characteristic.CurrentHeaterCoolerState.COOLING
-        // hap.Characteristic.CurrentHeaterCoolerState.HEATING
-
         this.heaterCoolerService.getCharacteristic(hap.Characteristic.CurrentHeaterCoolerState)
-            .on('get', (callback) => {
+            .on('get', (callback: CharacteristicGetCallback) => {
                 log.info("Current mode of AC was returned: " + (this.currentHeaterCoolerState == hap.Characteristic.CurrentHeaterCoolerState.INACTIVE ? "Inactive" : "~"));
                 callback(null, this.currentHeaterCoolerState)
             });
-
-        this.targetHeaterCoolerState = hap.Characteristic.TargetHeaterCoolerState.COOL;
 
         this.heaterCoolerService.getCharacteristic(hap.Characteristic.TargetHeaterCoolerState)
             .setProps({
@@ -84,17 +83,15 @@ class Sensibo implements AccessoryPlugin {
                     hap.Characteristic.TargetHeaterCoolerState.HEAT
                 ]
             })
-            .on('get', (callback) => {
+            .on('get', (callback: CharacteristicGetCallback) => {
                 log.info("Target mode of AC was returned: " + (this.targetHeaterCoolerState == hap.Characteristic.TargetHeaterCoolerState.COOL ? "COOL" : "HEAT"));
                 callback(null, this.targetHeaterCoolerState)
             })
-            .on('set', (value, callback) => {
-                this.targetHeaterCoolerState = value;
+            .on('set', (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
+                this.targetHeaterCoolerState = value as HAP.Characteristic.TargetHeaterCoolerState;
                 log.info("Target mode of AC was set: " + (this.targetHeaterCoolerState == hap.Characteristic.TargetHeaterCoolerState.COOL ? "COOL" : "HEAT"));
                 callback()
             });
-
-        this.targetTemperature = 20;
 
         this.heaterCoolerService.getCharacteristic(hap.Characteristic.CoolingThresholdTemperature)
                 .setProps({
@@ -102,11 +99,11 @@ class Sensibo implements AccessoryPlugin {
                     maxValue: 32,
                     minStep: 1
                 })
-                .on('get', (callback) => {
+                .on('get', (callback: CharacteristicGetCallback) => {
                     log.info("Cooling threshold of AC was returned: " + this.targetTemperature);
                     callback(this.targetTemperature)
                 })
-                .on('set', (value, callback) => {
+                .on('set', (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
                     this.targetTemperature = value;
                     log.info("Cooling threshold of AC was set: " + this.targetTemperature);
                     callback()
@@ -118,11 +115,11 @@ class Sensibo implements AccessoryPlugin {
                     maxValue: 30,
                     minStep: 1
                 })
-                .on('get', (callback) => {
+                .on('get', (callback: CharacteristicGetCallback) => {
                     log.info("Heating threshold of AC was returned: " + this.targetTemperature);
                     callback(this.targetTemperature)
                 })
-                .on('set', (value, callback) => {
+                .on('set', (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
                     this.targetTemperature = value;
                     log.info("Heating threshold of AC was set: " + this.targetTemperature);
                     callback()
