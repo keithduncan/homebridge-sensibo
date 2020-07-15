@@ -67,7 +67,10 @@ class Sensibo implements AccessoryPlugin {
                 maxValue: 100,
                 minStep: 0.1
             })
-            .on(CharacteristicEventTypes.GET, (callback: CharacteristicGetCallback) => {
+            .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
+		log.info("Current temperature of AC was requested");
+		const response = await got(`https://home.sensibo.com/api/v2/pods/${this.id}?fields=*`);
+		log.info("Response: " + response.body);
                 var temp = 0;
                 callback(null, temp)
             });
