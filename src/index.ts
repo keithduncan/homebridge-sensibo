@@ -103,7 +103,7 @@ class Sensibo implements AccessoryPlugin {
                 })
                 .on('get', (callback: CharacteristicGetCallback) => {
                     log.info("Cooling threshold of AC was returned: " + this.targetTemperature);
-                    callback(this.targetTemperature)
+                    callback(undefined, this.targetTemperature)
                 })
                 .on('set', (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
                     this.targetTemperature = value as number;
@@ -119,7 +119,7 @@ class Sensibo implements AccessoryPlugin {
                 })
                 .on('get', (callback: CharacteristicGetCallback) => {
                     log.info("Heating threshold of AC was returned: " + this.targetTemperature);
-                    callback(this.targetTemperature)
+                    callback(undefined, this.targetTemperature)
                 })
                 .on('set', (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
                     this.targetTemperature = value as number;
