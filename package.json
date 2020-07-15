@@ -1,0 +1,37 @@
+{
+  "name": "sensibo-homebridge",
+  "version": "1.0.0",
+  "description": "An accessory plugin for Sensibo",
+  "main": "dist/index.js",
+  "scripts": {
+    "clean": "rimraf ./dist",
+    "build": "rimraf ./dist && tsc",
+    "prepublishOnly": "npm run build",
+    "postpublish": "npm run clean",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Keith Duncan <keith_duncan@me.com>",
+  "engines": {
+    "homebridge": ">=1.0.0"
+  },
+  "keywords": [
+    "homebridge-plugin"
+  ],
+  "license": "MIT",
+  "files": [
+    "index.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/keithduncan/sensibo-homebridge.git"
+  },
+  "bugs": {
+    "url": "http://github.com/keithduncan/sensibo-homebridge/issues"
+  },
+  "devDependencies": {
+    "@types/node": "10.17.19",
+    "typescript": "^3.8.3",
+    "rimraf": "^3.0.2",
+    "homebridge": "^1.0.4"
+  }
+}
