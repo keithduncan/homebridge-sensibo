@@ -54,7 +54,7 @@ class Sensibo implements AccessoryPlugin {
                 log.info("Current state of AC was requested");
 
                 try {
-                    let result = this.fetchRemoteDevice(["acState"]);
+                    let result = await this.fetchRemoteDevice(["acState"]);
 
                     let active = result.acState.on;
                     callback(undefined, active);
@@ -64,7 +64,7 @@ class Sensibo implements AccessoryPlugin {
                 }
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                log.info("Current state of AC was set: " + (this.active ? "ON" : "OFF"));
+                log.info("Current state of AC was set: " + (value ? "ON" : "OFF"));
 
                 try {
                     const property = "on";
@@ -93,7 +93,7 @@ class Sensibo implements AccessoryPlugin {
                 log.info("Current temperature of AC was requested");
 
                 try {
-                    let result = this.fetchRemoteDevice(["measurements"]);
+                    let result = await this.fetchRemoteDevice(["measurements"]);
 
                     // Assume centigrade, or switch on result.temperatureUnit?
                     let temperature = result.measurements.temperature;
