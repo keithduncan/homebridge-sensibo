@@ -90,7 +90,7 @@ class Sensibo implements AccessoryPlugin {
                 callback(null, this.targetHeaterCoolerState)
             })
             .on('set', (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                this.targetHeaterCoolerState = value as this.api.hap.Characteristic.TargetHeaterCoolerState;
+                this.targetHeaterCoolerState = value;
                 log.info("Target mode of AC was set: " + (this.targetHeaterCoolerState == this.api.hap.Characteristic.TargetHeaterCoolerState.COOL ? "COOL" : "HEAT"));
                 callback()
             });
