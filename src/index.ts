@@ -66,7 +66,7 @@ class Sensibo implements AccessoryPlugin {
                 log.info("Current state of AC was set: " + (value ? "ON" : "OFF"));
 
                 try {
-                    await this.patchRemoteDevice("on", value)
+                    await this.patchRemoteDevice("on", value as boolean)
                     callback()
                 }
                 catch (err) {
@@ -190,12 +190,13 @@ class Sensibo implements AccessoryPlugin {
         return result;
     }
 
-    async patchRemoteDevice(field: String, value: Any) {
+    async patchRemoteDevice(field: String, value: boolean) {
+        const body = JSON.stringify({'newValue': value});
+        this.log.info(`PATCH ${body}`);
+
         const response = await got(`https://home.sensibo.com/api/v2/pods/${this.id}/acStates/${field}?apiKey=${this.apiKey}`, {
             method: 'PATCH',
-            json: {
-                'newValue': value
-            }
+            body: body
         });
         this.log.info("Response: " + response.body);
 
