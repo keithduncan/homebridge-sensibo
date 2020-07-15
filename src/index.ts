@@ -71,19 +71,10 @@ class Sensibo implements AccessoryPlugin {
                 log.info("Current temperature of AC was requested");
 
                 try {
-                    const response = await got(`https://home.sensibo.com/api/v2/pods/${this.id}?apiKey=${this.apiKey}&fields=*`);
-                    log.info("Response: " + response.body);
+                    let result = this.fetchRemoteDevice(["measurements"]);
 
-                    let json = JSON.parse(response.body);
-                    if (json.status != "success") {
-                        callback("Response `status` was not success");
-                        return;
-                    }
-
-                    let result = json.result;
                     // Assume centigrade, or switch on result.temperatureUnit?
                     let temperature = result.measurements.temperature;
-
                     callback(null, temperature)
                     return;
                 }
@@ -168,5 +159,22 @@ class Sensibo implements AccessoryPlugin {
             this.informationService,
             this.heaterCoolerService,
         ];
+    }
+
+    async fetchRemoteDevice(fields: String[]) {
+        var apiFields = "*";
+        if (fields.length > 0) {
+            apiFields = fields.join(",");
+        }
+        const response = await got(`https://home.sensibo.com/api/v2/pods/${this.id}?apiKey=${this.apiKey}&fields=${apiFields}`);
+        this.log.info("Response: " + response.body);
+
+        let json = JSON.parse(response.body);
+        if (json.status != "success") {
+            throw "Response `status` was not success";
+        }
+
+        let result = json.result;
+        return result;
     }
 }
