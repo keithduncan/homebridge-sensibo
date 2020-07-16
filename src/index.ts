@@ -28,8 +28,6 @@ class Sensibo implements AccessoryPlugin {
 
     private readonly apiKey: string;
     private readonly id: string;
-    
-    private targetTemperature: number = 20;
 
     private readonly heaterCoolerService: Service;
     private readonly informationService: Service;
@@ -176,12 +174,11 @@ class Sensibo implements AccessoryPlugin {
                 minStep: 1
             })
             .on(CharacteristicEventTypes.GET, (callback: CharacteristicGetCallback) => {
-                log.info("Cooling threshold of AC was returned: " + this.targetTemperature);
-                callback(undefined, this.targetTemperature)
+                log.info("CoolingThresholdTemperature GET");
+                callback(undefined, 0)
             })
             .on(CharacteristicEventTypes.SET, (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                this.targetTemperature = value as number;
-                log.info("Cooling threshold of AC was set: " + this.targetTemperature);
+                log.info(`CoolingThresholdTemperature SET ${value}`);
                 callback()
             });
 
@@ -192,12 +189,11 @@ class Sensibo implements AccessoryPlugin {
                 minStep: 1
             })
             .on(CharacteristicEventTypes.GET, (callback: CharacteristicGetCallback) => {
-                log.info("Heating threshold of AC was returned: " + this.targetTemperature);
-                callback(undefined, this.targetTemperature)
+                log.info("HeatingThresholdTemperature GET");
+                callback(undefined, 0)
             })
             .on(CharacteristicEventTypes.SET, (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                this.targetTemperature = value as number;
-                log.info("Heating threshold of AC was set: " + this.targetTemperature);
+                log.info(`HeatingThresholdTemperature SET ${value}`);
                 callback()
             });
 
