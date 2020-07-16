@@ -29,7 +29,6 @@ class Sensibo implements AccessoryPlugin {
     private readonly apiKey: string;
     private readonly id: string;
     
-    private currentHeaterCoolerState = hap.Characteristic.CurrentHeaterCoolerState.INACTIVE; // COOLING, HEATING
     private targetHeaterCoolerState = hap.Characteristic.TargetHeaterCoolerState.COOL; // HEAT
     private targetTemperature: number = 20;
 
@@ -97,9 +96,29 @@ class Sensibo implements AccessoryPlugin {
             });
 
         this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.CurrentHeaterCoolerState)
-            .on(CharacteristicEventTypes.GET, (callback: CharacteristicGetCallback) => {
-                log.info("Current mode of AC was returned: " + (this.currentHeaterCoolerState == this.api.hap.Characteristic.CurrentHeaterCoolerState.INACTIVE ? "Inactive" : "~"));
-                callback(undefined, this.currentHeaterCoolerState)
+            .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
+                log.info("CurrentHeaterCoolerState GET");
+
+                try {
+                    let result = await this.fetchRemoteDevice(["acState"]);
+
+                    let acState = result.acState;
+                    if (!acState.on) {
+                        callback(undefined, this.api.hap.Characteristic.CurrentHeaterCoolerState.INACTIVE)
+                    } else {
+                        if (acState.mode == "heat") {
+                            callback(undefined, this.api.hap.Characteristic.CurrentHeaterCoolerState.HEATING)
+                        } else if (acState.mode == "cool") {
+                            callback(undefined, this.api.hap.Characteristic.CurrentHeaterCoolerState.COOLING)
+                        } else {
+                            throw `Unknown state ${acState.mode}`
+                        }
+                    }
+                }
+                catch (err) {
+                    this.log.error(`CurrentHeaterCoolerState GET error ${err}`);
+                    callback(err)
+                }
             });
 
         this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.TargetHeaterCoolerState)
