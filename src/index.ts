@@ -66,7 +66,7 @@ class Sensibo implements AccessoryPlugin {
                 log.info("Current state of AC was set: " + (value ? "ON" : "OFF"));
 
                 try {
-                    await this.patchRemoteDevice("on", value ? true : false)
+                    await this.patchRemoteDevice("on", value == this.api.hap.Characteristic.Active.ACTIVE ? true : false)
                     callback()
                 }
                 catch (err) {
