@@ -57,7 +57,7 @@ class Sensibo implements AccessoryPlugin {
                     callback(undefined, result.acState.on);
                 }
                 catch (err) {
-                    this.log.error(`Active GET error ${err}`);
+                    log.error(`Active GET error ${err}`);
                     callback(err)
                 }
             })
@@ -69,7 +69,7 @@ class Sensibo implements AccessoryPlugin {
                     callback()
                 }
                 catch (err) {
-                    this.log.error(`Active SET error ${err}`);
+                    log.error(`Active SET error ${err}`);
                     callback(err)
                 }
             });
@@ -90,7 +90,7 @@ class Sensibo implements AccessoryPlugin {
                     callback(undefined, temperature)
                 }
                 catch (err) {
-                    this.log.error(`CurrentTemperature GET error ${err}`);
+                    log.error(`CurrentTemperature GET error ${err}`);
                     callback(err)
                 }
             });
@@ -116,7 +116,7 @@ class Sensibo implements AccessoryPlugin {
                     }
                 }
                 catch (err) {
-                    this.log.error(`CurrentHeaterCoolerState GET error ${err}`);
+                    log.error(`CurrentHeaterCoolerState GET error ${err}`);
                     callback(err)
                 }
             });
