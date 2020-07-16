@@ -190,7 +190,7 @@ class Sensibo implements AccessoryPlugin {
         return result;
     }
 
-    async patchRemoteDevice(field: String, value: boolean) {
+    async patchRemoteDevice(field: String, value: any) {
         const body = JSON.stringify({'newValue': value});
         this.log.info(`PATCH ${body}`);
 
