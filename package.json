@@ -1,5 +1,5 @@
 {
-  "name": "homebridge-sensibo",
+  "name": "@keith_duncan/homebridge-sensibo",
   "version": "1.0.0",
   "description": "An accessory plugin for Sensibo",
   "main": "dist/index.js",
@@ -23,10 +23,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/keithduncan/sensibo-homebridge.git"
+    "url": "git://github.com/keithduncan/homebridge-sensibo.git"
   },
   "bugs": {
-    "url": "http://github.com/keithduncan/sensibo-homebridge/issues"
+    "url": "http://github.com/keithduncan/homebridge-sensibo/issues"
   },
   "dependencies": {
     "got": "^11.5.0"
