@@ -178,7 +178,7 @@ class Sensibo implements AccessoryPlugin {
 
                 try {
                     let result = await this.fetchRemoteDevice(["acState"]);
-                    callback(undefined, result.acState.tartgetTemperature)
+                    callback(undefined, result.acState.targetTemperature)
                 }
                 catch (err) {
                     log.error(`CoolingThresholdTemperature SET error ${err}`);
@@ -189,7 +189,7 @@ class Sensibo implements AccessoryPlugin {
                 log.info(`CoolingThresholdTemperature SET ${value}`);
 
                 try {
-                    let result = await this.patchRemoteDevice("tartgetTemperature", value);
+                    let result = await this.patchRemoteDevice("targetTemperature", value);
                     callback()
                 }
                 catch (err) {
@@ -209,7 +209,7 @@ class Sensibo implements AccessoryPlugin {
 
                 try {
                     let result = await this.fetchRemoteDevice(["acState"]);
-                    callback(undefined, result.acState.tartgetTemperature)
+                    callback(undefined, result.acState.targetTemperature)
                 }
                 catch (err) {
                     log.error(`HeatingThresholdTemperature SET error ${err}`);
@@ -220,7 +220,7 @@ class Sensibo implements AccessoryPlugin {
                 log.info(`HeatingThresholdTemperature SET ${value}`);
 
                 try {
-                    let result = await this.patchRemoteDevice("tartgetTemperature", value);
+                    let result = await this.patchRemoteDevice("targetTemperature", value);
                     callback()
                 }
                 catch (err) {
