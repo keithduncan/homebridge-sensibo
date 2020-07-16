@@ -51,7 +51,7 @@ class Sensibo implements AccessoryPlugin {
         this.heaterCoolerService = new this.api.hap.Service.HeaterCooler(this.name);
         this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.Active)
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
-                log.info("Current state of AC was requested");
+                log.info("Active GET");
 
                 try {
                     let result = await this.fetchRemoteDevice(["acState"]);
@@ -63,14 +63,14 @@ class Sensibo implements AccessoryPlugin {
                 }
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                log.info("Current state of AC was set: " + (value ? "ON" : "OFF"));
+                log.info("Active SET " + (value ? "ON" : "OFF"));
 
                 try {
                     await this.patchRemoteDevice("on", value == this.api.hap.Characteristic.Active.ACTIVE ? true : false)
                     callback()
                 }
                 catch (err) {
-                    this.log.error(`Active SET error ${err} ${err.options}`);
+                    this.log.error(`Active SET error ${err}`);
                     callback(err)
                 }
             });
@@ -82,16 +82,16 @@ class Sensibo implements AccessoryPlugin {
                 minStep: 0.1
             })
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
-                log.info("Current temperature of AC was requested");
+                log.info("CurrentTemperature GET");
 
                 try {
                     let result = await this.fetchRemoteDevice(["measurements"]);
-
                     // Assume centigrade, or switch on result.temperatureUnit?
                     let temperature = result.measurements.temperature;
                     callback(undefined, temperature)
                 }
                 catch (err) {
+                    this.log.error(`CurrentTemperature GET error ${err}`);
                     callback(err)
                 }
             });
