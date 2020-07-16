@@ -173,13 +173,29 @@ class Sensibo implements AccessoryPlugin {
                 maxValue: 32,
                 minStep: 1
             })
-            .on(CharacteristicEventTypes.GET, (callback: CharacteristicGetCallback) => {
+            .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
                 log.info("CoolingThresholdTemperature GET");
-                callback(undefined, 0)
+
+                try {
+                    let result = this.fetchRemoteDevice(["acState"]);
+                    callback(undefined, result.acState.tartgetTemperature)
+                }
+                catch (err) {
+                    log.error(`CoolingThresholdTemperature SET error ${err}`);
+                    callback(err)
+                }
             })
             .on(CharacteristicEventTypes.SET, (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
                 log.info(`CoolingThresholdTemperature SET ${value}`);
-                callback()
+
+                try {
+                    let result = await this.patchRemoteDevice("tartgetTemperature", value);
+                    callback()
+                }
+                catch (err) {
+                    log.error(`CoolingThresholdTemperature SET error ${err}`)
+                    callback(err)
+                }
             });
 
         this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.HeatingThresholdTemperature)
@@ -190,11 +206,27 @@ class Sensibo implements AccessoryPlugin {
             })
             .on(CharacteristicEventTypes.GET, (callback: CharacteristicGetCallback) => {
                 log.info("HeatingThresholdTemperature GET");
-                callback(undefined, 0)
+
+                try {
+                    let result = this.fetchRemoteDevice(["acState"]);
+                    callback(undefined, result.acState.tartgetTemperature)
+                }
+                catch (err) {
+                    log.error(`HeatingThresholdTemperature SET error ${err}`);
+                    callback(err)
+                }
             })
-            .on(CharacteristicEventTypes.SET, (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
+            .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
                 log.info(`HeatingThresholdTemperature SET ${value}`);
-                callback()
+
+                try {
+                    let result = await this.patchRemoteDevice("tartgetTemperature", value);
+                    callback()
+                }
+                catch (err) {
+                    log.error(`HeatingThresholdTemperature SET error ${err}`)
+                    callback(err)
+                }
             });
 
         log.info("AC finished initializing!");
