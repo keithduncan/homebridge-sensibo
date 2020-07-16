@@ -29,7 +29,6 @@ class Sensibo implements AccessoryPlugin {
     private readonly apiKey: string;
     private readonly id: string;
     
-    private targetHeaterCoolerState = hap.Characteristic.TargetHeaterCoolerState.COOL; // HEAT
     private targetTemperature: number = 20;
 
     private readonly heaterCoolerService: Service;
@@ -128,14 +127,46 @@ class Sensibo implements AccessoryPlugin {
                     this.api.hap.Characteristic.TargetHeaterCoolerState.HEAT
                 ]
             })
-            .on(CharacteristicEventTypes.GET, (callback: CharacteristicGetCallback) => {
-                log.info("Target mode of AC was returned: " + (this.targetHeaterCoolerState == this.api.hap.Characteristic.TargetHeaterCoolerState.COOL ? "COOL" : "HEAT"));
-                callback(undefined, this.targetHeaterCoolerState)
+            .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
+                log.info("TargetHeaterCoolerState GET");
+
+                try {
+                    let result = await this.fetchRemoteDevice(["acState"]);
+
+                    let acState = result.acState;
+                    if (acState.mode == "heat") {
+                        callback(undefined, this.api.hap.Characteristic.TargetHeaterCoolerState.HEAT)
+                    } else if (acState.mode == "cool") {
+                        callback(undefined, this.api.hap.Characteristic.TargetHeaterCoolerState.COOL)
+                    } else {
+                        throw `Unknown state ${acState.mode}`
+                    }
+                }
+                catch (err) {
+                    log.error(`TargetHeaterCoolerState GET error ${err}`);
+                    callback(err)
+                }
             })
-            .on(CharacteristicEventTypes.SET, (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                this.targetHeaterCoolerState = value as number;
-                log.info("Target mode of AC was set: " + (this.targetHeaterCoolerState == this.api.hap.Characteristic.TargetHeaterCoolerState.COOL ? "COOL" : "HEAT"));
-                callback()
+            .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
+                log.info("TargetHeaterCoolerState SET");
+
+                try {
+                    let mode;
+                    if (value == this.api.hap.Characteristic.TargetHeaterCoolerState.HEAT) {
+                        mode = "heat";
+                    } else if (value == this.api.hap.Characteristic.TargetHeaterCoolerState.COOL) {
+                        mode = "cool";
+                    } else {
+                        throw `Unknown mode ${value}`
+                    }
+
+                    let result = await this.patchRemoteDevice("mode", mode);
+                    callback()
+                }
+                catch (err) {
+                    log.error(`TargetHeaterCoolerState SET error ${err}`);
+                    callback(err)
+                }
             });
 
         this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.CoolingThresholdTemperature)
