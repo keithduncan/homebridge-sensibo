@@ -61,7 +61,7 @@ class Sensibo implements AccessoryPlugin {
                 }
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                log.info("Active SET " + (value ? "ON" : "OFF"));
+                log.info(`Active SET ${value}`);
 
                 try {
                     await this.patchRemoteDevice("on", value == this.api.hap.Characteristic.Active.ACTIVE ? true : false)
@@ -148,7 +148,7 @@ class Sensibo implements AccessoryPlugin {
                 }
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                log.info("TargetHeaterCoolerState SET");
+                log.info(`TargetHeaterCoolerState SET ${value}`);
 
                 try {
                     let mode;
