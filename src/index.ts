@@ -285,7 +285,7 @@ class Sensibo implements AccessoryPlugin {
         return [
             this.informationService,
             this.heaterCoolerService,
-            this.fanService,
+            //this.fanService,
         ];
     }
 
