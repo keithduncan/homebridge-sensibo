@@ -47,26 +47,26 @@ class Sensibo implements AccessoryPlugin {
         this.heaterCoolerService = new this.api.hap.Service.HeaterCooler(this.name);
         this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.Active)
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
-                log.info("Active GET");
+                log.info("HeaterCooler Active GET");
 
                 try {
                     let result = await this.fetchRemoteDevice(["acState"]);
                     callback(undefined, result.acState.on);
                 }
                 catch (err) {
-                    log.error(`Active GET error ${err}`);
+                    log.error(`HeaterCooler Active GET error ${err}`);
                     callback(err)
                 }
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                log.info(`Active SET ${value}`);
+                log.info(`HeaterCooler Active SET ${value}`);
 
                 try {
                     await this.patchRemoteDevice("on", value == this.api.hap.Characteristic.Active.ACTIVE ? true : false)
                     callback()
                 }
                 catch (err) {
-                    log.error(`Active SET error ${err}`);
+                    log.error(`HeaterCooler Active SET error ${err}`);
                     callback(err)
                 }
             });
@@ -78,7 +78,7 @@ class Sensibo implements AccessoryPlugin {
                 minStep: 0.1
             })
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
-                log.info("CurrentTemperature GET");
+                log.info("HeaterCooler CurrentTemperature GET");
 
                 try {
                     let result = await this.fetchRemoteDevice(["measurements"]);
@@ -87,14 +87,14 @@ class Sensibo implements AccessoryPlugin {
                     callback(undefined, temperature)
                 }
                 catch (err) {
-                    log.error(`CurrentTemperature GET error ${err}`);
+                    log.error(`HeaterCooler CurrentTemperature GET error ${err}`);
                     callback(err)
                 }
             });
 
         this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.CurrentHeaterCoolerState)
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
-                log.info("CurrentHeaterCoolerState GET");
+                log.info("HeaterCooler CurrentHeaterCoolerState GET");
 
                 try {
                     let result = await this.fetchRemoteDevice(["acState"]);
@@ -113,7 +113,7 @@ class Sensibo implements AccessoryPlugin {
                     }
                 }
                 catch (err) {
-                    log.error(`CurrentHeaterCoolerState GET error ${err}`);
+                    log.error(`HeaterCooler CurrentHeaterCoolerState GET error ${err}`);
                     callback(err)
                 }
             });
@@ -126,7 +126,7 @@ class Sensibo implements AccessoryPlugin {
                 ]
             })
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
-                log.info("TargetHeaterCoolerState GET");
+                log.info("HeaterCooler TargetHeaterCoolerState GET");
 
                 try {
                     let result = await this.fetchRemoteDevice(["acState"]);
@@ -141,12 +141,12 @@ class Sensibo implements AccessoryPlugin {
                     }
                 }
                 catch (err) {
-                    log.error(`TargetHeaterCoolerState GET error ${err}`);
+                    log.error(`HeaterCooler TargetHeaterCoolerState GET error ${err}`);
                     callback(err)
                 }
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                log.info(`TargetHeaterCoolerState SET ${value}`);
+                log.info(`HeaterCooler TargetHeaterCoolerState SET ${value}`);
 
                 try {
                     let mode;
@@ -162,7 +162,7 @@ class Sensibo implements AccessoryPlugin {
                     callback()
                 }
                 catch (err) {
-                    log.error(`TargetHeaterCoolerState SET error ${err}`);
+                    log.error(`HeaterCooler TargetHeaterCoolerState SET error ${err}`);
                     callback(err)
                 }
             });
@@ -174,26 +174,26 @@ class Sensibo implements AccessoryPlugin {
                 minStep: 1
             })
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
-                log.info("CoolingThresholdTemperature GET");
+                log.info("HeaterCooler CoolingThresholdTemperature GET");
 
                 try {
                     let result = await this.fetchRemoteDevice(["acState"]);
                     callback(undefined, result.acState.targetTemperature)
                 }
                 catch (err) {
-                    log.error(`CoolingThresholdTemperature SET error ${err}`);
+                    log.error(`HeaterCooler CoolingThresholdTemperature SET error ${err}`);
                     callback(err)
                 }
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                log.info(`CoolingThresholdTemperature SET ${value}`);
+                log.info(`HeaterCooler CoolingThresholdTemperature SET ${value}`);
 
                 try {
                     let result = await this.patchRemoteDevice("targetTemperature", value);
                     callback()
                 }
                 catch (err) {
-                    log.error(`CoolingThresholdTemperature SET error ${err}`)
+                    log.error(`HeaterCooler CoolingThresholdTemperature SET error ${err}`)
                     callback(err)
                 }
             });
@@ -205,7 +205,7 @@ class Sensibo implements AccessoryPlugin {
                 minStep: 1
             })
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
-                log.info("HeatingThresholdTemperature GET");
+                log.info("HeaterCooler HeatingThresholdTemperature GET");
 
                 try {
                     let result = await this.fetchRemoteDevice(["acState"]);
@@ -217,7 +217,7 @@ class Sensibo implements AccessoryPlugin {
                 }
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                log.info(`HeatingThresholdTemperature SET ${value}`);
+                log.info(`HeaterCooler HeatingThresholdTemperature SET ${value}`);
 
                 try {
                     let result = await this.patchRemoteDevice("targetTemperature", value);
