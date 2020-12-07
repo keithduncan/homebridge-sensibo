@@ -29,8 +29,9 @@ class Sensibo implements AccessoryPlugin {
     private readonly apiKey: string;
     private readonly id: string;
 
-    private readonly heaterCoolerService: Service;
     private readonly informationService: Service;
+    private readonly heaterCoolerService: Service;
+    private readonly fanService: Service;
 
     constructor(log: Logging, config: AccessoryConfig, api: API) {
         this.log = log;
