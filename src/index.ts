@@ -231,6 +231,38 @@ class Sensibo implements AccessoryPlugin {
                 }
             });
 
+        this.fanService = new this.api.hap.Service.Fanv2(this.name);
+        this.fanService.getCharacteristic(this.api.hap.Characteristic.Active)
+            .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
+                log.info("Fan Active GET");
+
+                try {
+                    let result = await this.fetchRemoteDevice(["acState"]);
+                    callback(undefined, result.acState.on);
+                }
+                catch (err) {
+                    log.error(`Fan Active GET error ${err}`);
+                    callback(err)
+                }
+            })
+            .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
+                log.info(`Fan Active SET ${value}`);
+
+                try {
+                    if (value == this.api.hap.Characteristic.Active.ACTIVE) {
+                        await this.patchRemoteDevice("mode", "fan");
+                    }
+
+                    await this.patchRemoteDevice("on", value == this.api.hap.Characteristic.Active.ACTIVE ? true : false)
+                    
+                    callback()
+                }
+                catch (err) {
+                    log.error(`Fan Active SET error ${err}`);
+                    callback(err)
+                }
+            });
+
         log.info("AC finished initializing!");
     }
 
@@ -250,6 +282,7 @@ class Sensibo implements AccessoryPlugin {
         return [
             this.informationService,
             this.heaterCoolerService,
+            this.fanService,
         ];
     }
 
