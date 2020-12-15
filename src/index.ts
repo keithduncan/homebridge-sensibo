@@ -329,7 +329,7 @@ class Sensibo implements AccessoryPlugin {
                     let acState = result.acState;
 
                     let on = acState.on && acState.mode == "dry";
-                    callback(undefined, on ? Characteristic.CurrentHumidifierDehumidifierState.DEHUMIDIFYING : this.api.hap.Characteristic.CurrentHumidifierDehumidifierState.INACTIVE);
+                    callback(undefined, on ? this.api.hap.Characteristic.CurrentHumidifierDehumidifierState.DEHUMIDIFYING : this.api.hap.Characteristic.CurrentHumidifierDehumidifierState.INACTIVE);
                 }
                 catch (err) {
                     log.error(`Fan Active GET error ${err}`);
