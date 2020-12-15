@@ -463,7 +463,26 @@ class Sensibo implements AccessoryPlugin {
             apiFields = fields.join(",");
         }
         const response = await got(`https://home.sensibo.com/api/v2/pods/${this.id}?apiKey=${this.apiKey}&fields=${apiFields}`);
-        this.log.info("Response: " + response.body);
+        this.log.info("GET /api/v2/pods/${this.id} Response: " + response.body);
+
+        let json = JSON.parse(response.body);
+        if (json.status != "success") {
+            throw "Response `status` was not success";
+        }
+
+        let result = json.result;
+        return result;
+    }
+
+    async updateRemoteDevice(fields: [String: Any]) {
+        const body = JSON.stringify(fields);
+        this.log.info(`POST /api/v2/pods/${this.id}/acStates ${body}`);
+
+        const response = await got(`https://home.sensibo.com/api/v2/pods/${this.id}/acStates?apiKey=${this.apiKey}`, {
+            method: 'POST',
+            body: body
+        });
+        this.log.info("POST /api/v2/pods/${this.id}/acStates Response: " + response.body);
 
         let json = JSON.parse(response.body);
         if (json.status != "success") {
@@ -476,13 +495,13 @@ class Sensibo implements AccessoryPlugin {
 
     async patchRemoteDevice(field: String, value: any) {
         const body = JSON.stringify({'newValue': value});
-        this.log.info(`PATCH ${body}`);
+        this.log.info(`PATCH /api/v2/pods/${this.id}/acStates/${field} ${body}`);
 
         const response = await got(`https://home.sensibo.com/api/v2/pods/${this.id}/acStates/${field}?apiKey=${this.apiKey}`, {
             method: 'PATCH',
             body: body
         });
-        this.log.info("Response: " + response.body);
+        this.log.info("PATCH /api/v2/pods/${this.id}/acStates/${field} Response: " + response.body);
 
         let json = JSON.parse(response.body);
         if (json.status != "success") {
