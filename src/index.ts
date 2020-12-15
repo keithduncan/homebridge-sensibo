@@ -226,7 +226,7 @@ class Sensibo implements AccessoryPlugin {
                     callback(undefined, result.acState.targetTemperature)
                 }
                 catch (err) {
-                    log.error(`HeatingThresholdTemperature SET error ${err}`);
+                    log.error(`HeaterCooler HeatingThresholdTemperature SET error ${err}`);
                     callback(err)
                 }
             })
@@ -238,7 +238,7 @@ class Sensibo implements AccessoryPlugin {
                     callback()
                 }
                 catch (err) {
-                    log.error(`HeatingThresholdTemperature SET error ${err}`)
+                    log.error(`HeaterCooler HeatingThresholdTemperature SET error ${err}`)
                     callback(err)
                 }
             });
@@ -280,7 +280,7 @@ class Sensibo implements AccessoryPlugin {
                     callback(undefined, on);
                 }
                 catch (err) {
-                    log.error(`Fan Active GET error ${err}`);
+                    log.error(`HumidifierDehumidifier Active GET error ${err}`);
                     callback(err)
                 }
             })
@@ -306,7 +306,7 @@ class Sensibo implements AccessoryPlugin {
 
         this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.CurrentRelativeHumidity)
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
-                log.info("Dehumidifier CurrentRelativeHumidity GET");
+                log.info("HumidifierDehumidifier CurrentRelativeHumidity GET");
 
                 try {
                     let result = await this.fetchRemoteDevice(["measurements"]);
@@ -314,7 +314,7 @@ class Sensibo implements AccessoryPlugin {
                     callback(undefined, humidity)
                 }
                 catch (err) {
-                    log.error(`HeaterCooler CurrentRelativeHumidity GET error ${err}`);
+                    log.error(`HumidifierDehumidifier CurrentRelativeHumidity GET error ${err}`);
                     callback(err)
                 }
             });
@@ -322,7 +322,7 @@ class Sensibo implements AccessoryPlugin {
         // https://developers.homebridge.io/#/characteristic/CurrentHumidifierDehumidifierState
         this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.CurrentHumidifierDehumidifierState)
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
-                log.info("Dehumidifier CurrentHumidifierDehumidifierState GET");
+                log.info("HumidifierDehumidifier CurrentHumidifierDehumidifierState GET");
 
                 try {
                     let result = await this.fetchRemoteDevice(["acState"]);
@@ -332,7 +332,7 @@ class Sensibo implements AccessoryPlugin {
                     callback(undefined, on ? this.api.hap.Characteristic.CurrentHumidifierDehumidifierState.DEHUMIDIFYING : this.api.hap.Characteristic.CurrentHumidifierDehumidifierState.INACTIVE);
                 }
                 catch (err) {
-                    log.error(`Fan Active GET error ${err}`);
+                    log.error(`HumidifierDehumidifier Active GET error ${err}`);
                     callback(err)
                 }
             });
@@ -345,24 +345,24 @@ class Sensibo implements AccessoryPlugin {
                 ]
             })
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
-                log.info("Dehumidifier TargetHumidifierDehumidifierState GET");
+                log.info("HumidifierDehumidifier TargetHumidifierDehumidifierState GET");
 
                 callback(undefined, this.api.hap.Characteristic.TargetHumidifierDehumidifierState.DEHUMIDIFIER)
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                log.info("Dehumidifier TargetHumidifierDehumidifierState SET");
+                log.info("HumidifierDehumidifier TargetHumidifierDehumidifierState SET");
 
                 callback()
             });
 
         this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.SwingMode)
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
-                log.info("Dehumidifier SwingMode GET");
+                log.info("HumidifierDehumidifier SwingMode GET");
 
                 callback(undefined, this.api.hap.Characteristic.SwingMode.SWING_DISABLED)
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                log.info("Dehumidifier SwingMode SET");
+                log.info("HumidifierDehumidifier SwingMode SET");
 
                 // this.api.hap.Characteristic.SwingMode.SWING_DISABLED
                 // this.api.hap.Characteristic.SwingMode.SWING_ENABLED
@@ -372,12 +372,12 @@ class Sensibo implements AccessoryPlugin {
 
         this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.RotationSpeed)
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
-                log.info("Dehumidifier RotationSpeed GET");
+                log.info("HumidifierDehumidifier RotationSpeed GET");
 
                 callback(undefined, 0)
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                log.info("Dehumidifier RotationSpeed SET");
+                log.info("HumidifierDehumidifier RotationSpeed SET");
 
                 callback()
             });
