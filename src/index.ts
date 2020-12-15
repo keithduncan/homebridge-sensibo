@@ -308,7 +308,15 @@ class Sensibo implements AccessoryPlugin {
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
                 log.info("Dehumidifier CurrentRelativeHumidity GET");
 
-                callback(undefined, 0)
+                try {
+                    let result = await this.fetchRemoteDevice(["measurements"]);
+                    let humidity = result.measurements.humidity;
+                    callback(undefined, humidity)
+                }
+                catch (err) {
+                    log.error(`HeaterCooler CurrentRelativeHumidity GET error ${err}`);
+                    callback(err)
+                }
             });
 
         // https://developers.homebridge.io/#/characteristic/CurrentHumidifierDehumidifierState
