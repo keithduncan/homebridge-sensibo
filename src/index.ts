@@ -41,7 +41,6 @@ class Sensibo implements AccessoryPlugin {
 
         this.apiKey = config.apiKey;
         this.id = config.id;
-
         this.informationService = new this.api.hap.Service.AccessoryInformation()
             .setCharacteristic(this.api.hap.Characteristic.Manufacturer, "Sensibo")
             .setCharacteristic(this.api.hap.Characteristic.Model, "Sensibo Sky");
@@ -67,17 +66,23 @@ class Sensibo implements AccessoryPlugin {
                 log.info(`HeaterCooler Active SET ${value}`);
 
                 try {
+                    // Becoming active
                     if (value == this.api.hap.Characteristic.Active.ACTIVE) {
                         await this.patchRemoteDevice("mode", "cool");
                         await this.patchRemoteDevice("on", value == this.api.hap.Characteristic.Active.ACTIVE ? true : false)
 
-                        // TODO notify the other services that they are now Active: false
+                        // Notify the other services that they are now Active: false
+                        this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.Active)
+                            .updateValue(false);
+                        this.fanService.getCharacteristic(this.api.hap.Characteristic.Active)
+                            .updateValue(false);
                     } else {
                         // Only allow an Active: false to turn off the device
                         // if the device is actually in heater cooler mode.
 
                         let result = await this.fetchRemoteDevice(["acState"]);
                         let acState = result.acState;
+
                         let on = acState.on && (acState.mode == "heat" || acState.mode == "cool");
 
                         if (on) {
@@ -322,13 +327,29 @@ class Sensibo implements AccessoryPlugin {
                 log.info(`HumidifierDehumidifier Active SET ${value}`);
 
                 try {
+                    // Becoming active
                     if (value == this.api.hap.Characteristic.Active.ACTIVE) {
                         await this.patchRemoteDevice("mode", "dry");
+                        await this.patchRemoteDevice("on", value == this.api.hap.Characteristic.Active.ACTIVE ? true : false)
+
+                        // Notify the other services that they are now Active: false
+                        this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.Active)
+                            .updateValue(false);
+                        this.fanService.getCharacteristic(this.api.hap.Characteristic.Active)
+                            .updateValue(false);
+                    } else {
+                        // Only allow an Active: false to turn off the device
+                        // if the device is actually in dehumidifier mode.
+
+                        let result = await this.fetchRemoteDevice(["acState"]);
+                        let acState = result.acState;
+
+                        let on = acState.on && (acState.mode == "dry");
+
+                        if (on) {
+                            await this.patchRemoteDevice("on", false);
+                        }
                     }
-
-                    await this.patchRemoteDevice("on", value == this.api.hap.Characteristic.Active.ACTIVE ? true : false)
-
-                    // TODO notify that the other services are now Active: false
                     
                     callback()
                 }
@@ -456,13 +477,29 @@ class Sensibo implements AccessoryPlugin {
                 log.info(`Fan Active SET ${value}`);
 
                 try {
+                    // Becoming active
                     if (value == this.api.hap.Characteristic.Active.ACTIVE) {
                         await this.patchRemoteDevice("mode", "fan");
+                        await this.patchRemoteDevice("on", value == this.api.hap.Characteristic.Active.ACTIVE ? true : false)
+
+                        // Notify the other services that they are now Active: false
+                        this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.Active)
+                            .updateValue(false);
+                        this.fanService.getCharacteristic(this.api.hap.Characteristic.Active)
+                            .updateValue(false);
+                    } else {
+                        // Only allow an Active: false to turn off the device
+                        // if the device is actually in dehumidifier mode.
+
+                        let result = await this.fetchRemoteDevice(["acState"]);
+                        let acState = result.acState;
+
+                        let on = acState.on && (acState.mode == "fan");
+
+                        if (on) {
+                            await this.patchRemoteDevice("on", false);
+                        }
                     }
-
-                    await this.patchRemoteDevice("on", value == this.api.hap.Characteristic.Active.ACTIVE ? true : false)
-
-                    // TODO notify that the other services are now Active: false
                     
                     callback()
                 }
