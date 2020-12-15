@@ -42,8 +42,8 @@ class Sensibo implements AccessoryPlugin {
         this.id = config.id;
 
         this.informationService = new this.api.hap.Service.AccessoryInformation()
-            .setCharacteristic(this.api.hap.Characteristic.Manufacturer, "Custom Manufacturer")
-            .setCharacteristic(this.api.hap.Characteristic.Model, "Custom Model");
+            .setCharacteristic(this.api.hap.Characteristic.Manufacturer, "Sensibo")
+            .setCharacteristic(this.api.hap.Characteristic.Model, "Sensibo Sky");
 
         this.heaterCoolerService = new this.api.hap.Service.HeaterCooler(this.name);
         this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.Active)
