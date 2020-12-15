@@ -145,7 +145,7 @@ class Sensibo implements AccessoryPlugin {
                     } else {
                         // Probably `fan` or `dry` mode, in which case the heater cooler aspect is inactive.
                         log.info(`Unknown state ${acState.mode}`);
-                        callback(undefined, this.api.hap.Characteristic.TargetHeaterCoolerState.OFF)
+                        callback(undefined, this.api.hap.Characteristic.TargetHeaterCoolerState.AUTO)
                     }
                 }
                 catch (err) {
