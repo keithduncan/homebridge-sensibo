@@ -363,6 +363,7 @@ class Sensibo implements AccessoryPlugin {
         this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.TargetHumidifierDehumidifierState)
             .setProps({
                 validValues: [
+                    this.api.hap.Characteristic.TargetHumidifierDehumidifierState.AUTO,
                     this.api.hap.Characteristic.TargetHumidifierDehumidifierState.DEHUMIDIFIER,
                 ]
             })
