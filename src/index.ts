@@ -247,12 +247,34 @@ class Sensibo implements AccessoryPlugin {
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
                 log.info("HeaterCooler SwingMode GET");
 
-                callback(undefined, this.api.hap.Characteristic.SwingMode.SWING_DISABLED)
+                try {
+                    let result = await this.fetchRemoteDevice(["acState"]);
+                    let acState = result.acState;
+
+                    let swing = acState.swing == "rangeFull" && acState.horizontalSwing == "rangeFull";
+
+                    callback(undefined, swing ? this.api.hap.Characteristic.SwingMode.SWING_ENABLED : this.api.hap.Characteristic.SwingMode.SWING_DISABLED);
+                }
+                catch (err) {
+                    log.error(`HeaterCooler SwingMode GET error ${err}`);
+                    callback(err)
+                }
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
                 log.info("HeaterCooler SwingMode SET");
 
-                callback()
+                let swing = value == this.api.hap.Characteristic.SwingMode.SWING_ENABLED ? "rangeFull" : "stopped";
+
+                try {
+                    await this.updateRemoteDevice({
+                        "swing": swing,
+                        "horizontalSwing": swing
+                    });
+                }
+                catch (err) {
+                    log.error(`HeaterCooler SwingMode SET error ${err}`);
+                    callback(err)
+                }
             });
 
         this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.RotationSpeed)
@@ -357,17 +379,36 @@ class Sensibo implements AccessoryPlugin {
 
         this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.SwingMode)
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
-                log.info("HumidifierDehumidifier SwingMode GET");
+                log.info("HeaterCooler SwingMode GET");
 
-                callback(undefined, this.api.hap.Characteristic.SwingMode.SWING_DISABLED)
+                try {
+                    let result = await this.fetchRemoteDevice(["acState"]);
+                    let acState = result.acState;
+
+                    let swing = acState.swing == "rangeFull" && acState.horizontalSwing == "rangeFull";
+
+                    callback(undefined, swing ? this.api.hap.Characteristic.SwingMode.SWING_ENABLED : this.api.hap.Characteristic.SwingMode.SWING_DISABLED);
+                }
+                catch (err) {
+                    log.error(`HeaterCooler SwingMode GET error ${err}`);
+                    callback(err)
+                }
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                log.info("HumidifierDehumidifier SwingMode SET");
+                log.info("HeaterCooler SwingMode SET");
 
-                // this.api.hap.Characteristic.SwingMode.SWING_DISABLED
-                // this.api.hap.Characteristic.SwingMode.SWING_ENABLED
+                let swing = value == this.api.hap.Characteristic.SwingMode.SWING_ENABLED ? "rangeFull" : "stopped";
 
-                callback()
+                try {
+                    await this.updateRemoteDevice({
+                        "swing": swing,
+                        "horizontalSwing": swing
+                    });
+                }
+                catch (err) {
+                    log.error(`HeaterCooler SwingMode SET error ${err}`);
+                    callback(err)
+                }
             });
 
         this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.RotationSpeed)
@@ -421,14 +462,36 @@ class Sensibo implements AccessoryPlugin {
 
         this.fanService.getCharacteristic(this.api.hap.Characteristic.SwingMode)
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
-                log.info("Fan SwingMode GET");
+                log.info("HeaterCooler SwingMode GET");
 
-                 callback(undefined, this.api.hap.Characteristic.SwingMode.SWING_DISABLED)
+                try {
+                    let result = await this.fetchRemoteDevice(["acState"]);
+                    let acState = result.acState;
+
+                    let swing = acState.swing == "rangeFull" && acState.horizontalSwing == "rangeFull";
+
+                    callback(undefined, swing ? this.api.hap.Characteristic.SwingMode.SWING_ENABLED : this.api.hap.Characteristic.SwingMode.SWING_DISABLED);
+                }
+                catch (err) {
+                    log.error(`HeaterCooler SwingMode GET error ${err}`);
+                    callback(err)
+                }
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                log.info("Fan SwingMode SET");
+                log.info("HeaterCooler SwingMode SET");
 
-                callback()
+                let swing = value == this.api.hap.Characteristic.SwingMode.SWING_ENABLED ? "rangeFull" : "stopped";
+
+                try {
+                    await this.updateRemoteDevice({
+                        "swing": swing,
+                        "horizontalSwing": swing
+                    });
+                }
+                catch (err) {
+                    log.error(`HeaterCooler SwingMode SET error ${err}`);
+                    callback(err)
+                }
             });
 
         this.fanService.getCharacteristic(this.api.hap.Characteristic.RotationSpeed)
