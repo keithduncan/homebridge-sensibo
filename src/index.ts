@@ -290,6 +290,39 @@ class Sensibo implements AccessoryPlugin {
                 }
             });
 
+        this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.CurrentRelativeHumidity)
+            .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
+                log.info("Dehumidifier CurrentRelativeHumidity GET");
+
+                callback(undefined, 0)
+            });
+
+        // https://developers.homebridge.io/#/characteristic/CurrentHumidifierDehumidifierState
+        this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.CurrentHumidifierDehumidifierState)
+            .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
+                log.info("Dehumidifier CurrentHumidifierDehumidifierState GET");
+
+                callback(undefined, this.api.hap.Characteristic.CurrentHumidifierDehumidifierState.INACTIVE)
+            });
+
+        // https://developers.homebridge.io/#/characteristic/TargetHumidifierDehumidifierState
+        this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.TargetHumidifierDehumidifierState)
+            .setProps({
+                validValues: [
+                    this.api.hap.Characteristic.TargetHumidifierDehumidifierState.DEHUMIDIFIER,
+                ]
+            })
+            .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
+                log.info("Dehumidifier TargetHumidifierDehumidifierState GET");
+
+                callback(undefined, this.api.hap.Characteristic.TargetHumidifierDehumidifierState.DEHUMIDIFIER)
+            })
+            .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
+                log.info("Dehumidifier TargetHumidifierDehumidifierState SET");
+
+                callback()
+            });
+
         this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.SwingMode)
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
                 log.info("Dehumidifier SwingMode GET");
