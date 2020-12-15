@@ -294,13 +294,13 @@ class Sensibo implements AccessoryPlugin {
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
                 log.info("Dehumidifier SwingMode GET");
 
-                callback(undefined, Characteristic.SwingMode.SWING_DISABLED)
+                callback(undefined, this.api.hap.Characteristic.SwingMode.SWING_DISABLED)
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
                 log.info("Dehumidifier SwingMode SET");
 
-                // Characteristic.SwingMode.SWING_DISABLED
-                // Characteristic.SwingMode.SWING_ENABLED
+                // this.api.hap.Characteristic.SwingMode.SWING_DISABLED
+                // this.api.hap.Characteristic.SwingMode.SWING_ENABLED
 
                 callback()
             });
@@ -358,7 +358,7 @@ class Sensibo implements AccessoryPlugin {
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
                 log.info("Fan SwingMode GET");
 
-                 callback(undefined, Characteristic.SwingMode.SWING_DISABLED)
+                 callback(undefined, this.api.hap.Characteristic.SwingMode.SWING_DISABLED)
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
                 log.info("Fan SwingMode SET");
