@@ -102,9 +102,10 @@ class Sensibo implements AccessoryPlugin {
 
                 try {
                     let result = await this.fetchRemoteDevice(["acState"]);
-
                     let acState = result.acState;
-                    if (!acState.on) {
+
+                    let on = acState.on && (acState.mode == "heat" || acState.mode == "cool");
+                    if (!on) {
                         callback(undefined, this.api.hap.Characteristic.CurrentHeaterCoolerState.INACTIVE)
                     } else {
                         if (acState.mode == "heat") {
