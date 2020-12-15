@@ -77,6 +77,7 @@ class Sensibo implements AccessoryPlugin {
                         // if the device is actually in heater cooler mode.
 
                         let result = await this.fetchRemoteDevice(["acState"]);
+                        let acState = result.acState;
                         let on = acState.on && (acState.mode == "heat" || acState.mode == "cool");
 
                         if (on) {
