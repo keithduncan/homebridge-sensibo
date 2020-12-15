@@ -67,11 +67,22 @@ class Sensibo implements AccessoryPlugin {
                 log.info(`HeaterCooler Active SET ${value}`);
 
                 try {
-                    // TODO set the mode to heat or cool?
+                    if (value == this.api.hap.Characteristic.Active.ACTIVE) {
+                        await this.patchRemoteDevice("mode", "cool");
+                        await this.patchRemoteDevice("on", value == this.api.hap.Characteristic.Active.ACTIVE ? true : false)
 
-                    await this.patchRemoteDevice("on", value == this.api.hap.Characteristic.Active.ACTIVE ? true : false)
+                        // TODO notify the other services that they are now Active: false
+                    } else {
+                        // Only allow an Active: false to turn off the device
+                        // if the device is actually in heater cooler mode.
 
-                    // TODO notify the other services that they are now Active: false
+                        let result = await this.fetchRemoteDevice(["acState"]);
+                        let on = acState.on && (acState.mode == "heat" || acState.mode == "cool");
+
+                        if on {
+                            await this.patchRemoteDevice("on", false);
+                        }
+                    }
 
                     callback()
                 }
