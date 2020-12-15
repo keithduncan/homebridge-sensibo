@@ -135,8 +135,8 @@ class Sensibo implements AccessoryPlugin {
 
                 try {
                     let result = await this.fetchRemoteDevice(["acState"]);
-
                     let acState = result.acState;
+
                     if (acState.mode == "heat") {
                         callback(undefined, this.api.hap.Characteristic.TargetHeaterCoolerState.HEAT)
                     } else if (acState.mode == "cool") {
@@ -144,7 +144,7 @@ class Sensibo implements AccessoryPlugin {
                     } else {
                         // Probably `fan` or `dry` mode, in which case the heater cooler aspect is inactive.
                         log.info(`Unknown state ${acState.mode}`);
-                        callback(undefined, this.api.hap.Characteristic.CurrentHeaterCoolerState.INACTIVE)
+                        callback(undefined, this.api.hap.Characteristic.TargetHeaterCoolerState.OFF)
                     }
                 }
                 catch (err) {
