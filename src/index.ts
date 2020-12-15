@@ -266,10 +266,8 @@ class Sensibo implements AccessoryPlugin {
                 let swing = value == this.api.hap.Characteristic.SwingMode.SWING_ENABLED ? "rangeFull" : "stopped";
 
                 try {
-                    await this.updateRemoteDevice({
-                        "swing": swing,
-                        "horizontalSwing": swing
-                    });
+                    await this.patchRemoteDevice("swing", swing);
+                    await this.patchRemoteDevice("horizontalSwing", swing);
                 }
                 catch (err) {
                     log.error(`HeaterCooler SwingMode SET error ${err}`);
@@ -400,10 +398,8 @@ class Sensibo implements AccessoryPlugin {
                 let swing = value == this.api.hap.Characteristic.SwingMode.SWING_ENABLED ? "rangeFull" : "stopped";
 
                 try {
-                    await this.updateRemoteDevice({
-                        "swing": swing,
-                        "horizontalSwing": swing
-                    });
+                    await this.patchRemoteDevice("swing", swing);
+                    await this.patchRemoteDevice("horizontalSwing", swing);
                 }
                 catch (err) {
                     log.error(`HeaterCooler SwingMode SET error ${err}`);
@@ -483,10 +479,8 @@ class Sensibo implements AccessoryPlugin {
                 let swing = value == this.api.hap.Characteristic.SwingMode.SWING_ENABLED ? "rangeFull" : "stopped";
 
                 try {
-                    await this.updateRemoteDevice({
-                        "swing": swing,
-                        "horizontalSwing": swing
-                    });
+                    await this.patchRemoteDevice("swing", swing);
+                    await this.patchRemoteDevice("horizontalSwing", swing);
                 }
                 catch (err) {
                     log.error(`HeaterCooler SwingMode SET error ${err}`);
