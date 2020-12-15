@@ -46,7 +46,7 @@ class Sensibo implements AccessoryPlugin {
             .setCharacteristic(this.api.hap.Characteristic.Manufacturer, "Sensibo")
             .setCharacteristic(this.api.hap.Characteristic.Model, "Sensibo Sky");
 
-        this.heaterCoolerService = new this.api.hap.Service.HeaterCooler(this.name);
+        this.heaterCoolerService = new this.api.hap.Service.HeaterCooler("Air Conditioner");
         this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.Active)
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
                 log.info("HeaterCooler Active GET");
@@ -253,7 +253,7 @@ class Sensibo implements AccessoryPlugin {
                 
             });
 
-        this.dehumidifierService = new this.api.hap.Service.HumidifierDehumidifier(this.name);
+        this.dehumidifierService = new this.api.hap.Service.HumidifierDehumidifier("Dehumidifier");
         this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.Active)
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
                 log.info("HumidifierDehumidifier Active GET");
@@ -290,7 +290,7 @@ class Sensibo implements AccessoryPlugin {
                 }
             });
 
-        this.fanService = new this.api.hap.Service.Fanv2(this.name);
+        this.fanService = new this.api.hap.Service.Fanv2("Fan");
         this.fanService.getCharacteristic(this.api.hap.Characteristic.Active)
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
                 log.info("Fan Active GET");
