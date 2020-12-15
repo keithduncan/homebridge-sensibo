@@ -237,7 +237,7 @@ class Sensibo implements AccessoryPlugin {
                 }
             });
 
-        this.heaterCoolerService.getCharacteristic(this.api.Characteristic.SwingMode)
+        this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.SwingMode)
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
                 log.info("HeaterCooler SwingMode GET");
             })
@@ -245,7 +245,7 @@ class Sensibo implements AccessoryPlugin {
                 log.info("HeaterCooler SwingMode SET");
             });
 
-        this.heaterCoolerService.getCharacteristic(this.api.Characteristic.RotationSpeed)
+        this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.RotationSpeed)
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
                 log.info("HeaterCooler RotationSpeed GET");
             })
@@ -290,7 +290,7 @@ class Sensibo implements AccessoryPlugin {
                 }
             });
 
-        this.dehumidifierService.getCharacteristic(this.api.Characteristic.SwingMode)
+        this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.SwingMode)
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
                 log.info("Dehumidifier SwingMode GET");
 
@@ -305,7 +305,7 @@ class Sensibo implements AccessoryPlugin {
                 callback()
             });
 
-        this.dehumidifierService.getCharacteristic(this.api.Characteristic.RotationSpeed)
+        this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.RotationSpeed)
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
                 log.info("Dehumidifier RotationSpeed GET");
 
@@ -354,7 +354,7 @@ class Sensibo implements AccessoryPlugin {
                 }
             });
 
-        this.fanService.getCharacteristic(this.api.Characteristic.SwingMode)
+        this.fanService.getCharacteristic(this.api.hap.Characteristic.SwingMode)
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
                 log.info("Fan SwingMode GET");
 
@@ -366,7 +366,7 @@ class Sensibo implements AccessoryPlugin {
                 callback()
             });
 
-        this.fanService.getCharacteristic(this.api.Characteristic.RotationSpeed)
+        this.fanService.getCharacteristic(this.api.hap.Characteristic.RotationSpeed)
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
                 log.info("Fan RotationSpeed GET");
 
