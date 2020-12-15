@@ -268,6 +268,8 @@ class Sensibo implements AccessoryPlugin {
                 try {
                     await this.patchRemoteDevice("swing", swing);
                     await this.patchRemoteDevice("horizontalSwing", swing);
+
+                    callback()
                 }
                 catch (err) {
                     log.error(`HeaterCooler SwingMode SET error ${err}`);
@@ -400,6 +402,8 @@ class Sensibo implements AccessoryPlugin {
                 try {
                     await this.patchRemoteDevice("swing", swing);
                     await this.patchRemoteDevice("horizontalSwing", swing);
+
+                    callback()
                 }
                 catch (err) {
                     log.error(`HeaterCooler SwingMode SET error ${err}`);
@@ -481,6 +485,8 @@ class Sensibo implements AccessoryPlugin {
                 try {
                     await this.patchRemoteDevice("swing", swing);
                     await this.patchRemoteDevice("horizontalSwing", swing);
+
+                    callback()
                 }
                 catch (err) {
                     log.error(`HeaterCooler SwingMode SET error ${err}`);
