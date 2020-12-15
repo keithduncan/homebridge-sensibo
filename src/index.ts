@@ -67,7 +67,12 @@ class Sensibo implements AccessoryPlugin {
                 log.info(`HeaterCooler Active SET ${value}`);
 
                 try {
+                    // TODO set the mode to heat or cool?
+
                     await this.patchRemoteDevice("on", value == this.api.hap.Characteristic.Active.ACTIVE ? true : false)
+
+                    // TODO notify the other services that they are now Active: false
+
                     callback()
                 }
                 catch (err) {
@@ -108,14 +113,15 @@ class Sensibo implements AccessoryPlugin {
                     let on = acState.on && (acState.mode == "heat" || acState.mode == "cool");
                     if (!on) {
                         callback(undefined, this.api.hap.Characteristic.CurrentHeaterCoolerState.INACTIVE)
+                        return
+                    }
+                    
+                    if (acState.mode == "heat") {
+                        callback(undefined, this.api.hap.Characteristic.CurrentHeaterCoolerState.HEATING)
+                    } else if (acState.mode == "cool") {
+                        callback(undefined, this.api.hap.Characteristic.CurrentHeaterCoolerState.COOLING)
                     } else {
-                        if (acState.mode == "heat") {
-                            callback(undefined, this.api.hap.Characteristic.CurrentHeaterCoolerState.HEATING)
-                        } else if (acState.mode == "cool") {
-                            callback(undefined, this.api.hap.Characteristic.CurrentHeaterCoolerState.COOLING)
-                        } else {
-                            throw `Unsupported HeaterCooler mode: ${acState.mode}`
-                        }
+                        throw `Unsupported HeaterCooler mode: ${acState.mode}`
                     }
                 }
                 catch (err) {
@@ -144,7 +150,7 @@ class Sensibo implements AccessoryPlugin {
                         callback(undefined, this.api.hap.Characteristic.TargetHeaterCoolerState.COOL)
                     } else {
                         // Probably `fan` or `dry` mode, in which case the heater cooler aspect is inactive.
-                        log.info(`Unknown state ${acState.mode}`);
+                        log.info(`HeaterCooler TargetHeaterCoolerState GET error unknown state ${acState.mode}`);
                         callback(undefined, this.api.hap.Characteristic.TargetHeaterCoolerState.AUTO)
                     }
                 }
@@ -240,17 +246,25 @@ class Sensibo implements AccessoryPlugin {
         this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.SwingMode)
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
                 log.info("HeaterCooler SwingMode GET");
+
+                callback(undefined, this.api.hap.Characteristic.SwingMode.SWING_DISABLED)
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
                 log.info("HeaterCooler SwingMode SET");
+
+                callback()
             });
 
         this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.RotationSpeed)
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
                 log.info("HeaterCooler RotationSpeed GET");
+
+                callback(undefined, 0)
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                log.info("HeaterCooler RotationSpeed SET");  
+                log.info("HeaterCooler RotationSpeed SET");
+
+                callback()
             });
 
         this.dehumidifierService = new this.api.hap.Service.HumidifierDehumidifier("Dehumidifier");
