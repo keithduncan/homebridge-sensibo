@@ -52,7 +52,10 @@ class Sensibo implements AccessoryPlugin {
 
                 try {
                     let result = await this.fetchRemoteDevice(["acState"]);
-                    callback(undefined, result.acState.on);
+                    let acState = result.acState;
+
+                    let on = acState.on && (acState.mode == "heat" || acState.mode == "cool");
+                    callback(undefined, on);
                 }
                 catch (err) {
                     log.error(`HeaterCooler Active GET error ${err}`);
