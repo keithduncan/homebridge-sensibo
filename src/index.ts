@@ -324,7 +324,17 @@ class Sensibo implements AccessoryPlugin {
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
                 log.info("Dehumidifier CurrentHumidifierDehumidifierState GET");
 
-                callback(undefined, this.api.hap.Characteristic.CurrentHumidifierDehumidifierState.INACTIVE)
+                try {
+                    let result = await this.fetchRemoteDevice(["acState"]);
+                    let acState = result.acState;
+
+                    let on = acState.on && acState.mode == "dry";
+                    callback(undefined, on ? Characteristic.CurrentHumidifierDehumidifierState.DEHUMIDIFYING : this.api.hap.Characteristic.CurrentHumidifierDehumidifierState.INACTIVE);
+                }
+                catch (err) {
+                    log.error(`Fan Active GET error ${err}`);
+                    callback(err)
+                }
             });
 
         // https://developers.homebridge.io/#/characteristic/TargetHumidifierDehumidifierState
@@ -457,6 +467,7 @@ class Sensibo implements AccessoryPlugin {
         ];
     }
 
+    // TODO make this cache for 5s and invalidate on updateRemoteDevice or patchRemoteDevice
     async fetchRemoteDevice(fields: String[]) {
         var apiFields = "*";
         if (fields.length > 0) {
@@ -474,7 +485,7 @@ class Sensibo implements AccessoryPlugin {
         return result;
     }
 
-    async updateRemoteDevice(fields: [String: Any]) {
+    async updateRemoteDevice(fields: object) {
         const body = JSON.stringify(fields);
         this.log.info(`POST /api/v2/pods/${this.id}/acStates ${body}`);
 
