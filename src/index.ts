@@ -79,7 +79,7 @@ class Sensibo implements AccessoryPlugin {
                         let result = await this.fetchRemoteDevice(["acState"]);
                         let on = acState.on && (acState.mode == "heat" || acState.mode == "cool");
 
-                        if on {
+                        if (on) {
                             await this.patchRemoteDevice("on", false);
                         }
                     }
