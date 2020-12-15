@@ -236,37 +236,95 @@ class Sensibo implements AccessoryPlugin {
                 }
             });
 
-        this.fanService = new this.api.hap.Service.Fanv2(this.name);
-        this.fanService.getCharacteristic(this.api.hap.Characteristic.Active)
+        this.heaterCoolerService.getCharacteristic(this.api.Characteristic.SwingMode)
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
-                log.info("Fan Active GET");
 
-                try {
-                    let result = await this.fetchRemoteDevice(["acState"]);
-                    callback(undefined, result.acState.on);
-                }
-                catch (err) {
-                    log.error(`Fan Active GET error ${err}`);
-                    callback(err)
-                }
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                log.info(`Fan Active SET ${value}`);
 
-                try {
-                    if (value == this.api.hap.Characteristic.Active.ACTIVE) {
-                        await this.patchRemoteDevice("mode", "fan");
-                    }
-
-                    await this.patchRemoteDevice("on", value == this.api.hap.Characteristic.Active.ACTIVE ? true : false)
-                    
-                    callback()
-                }
-                catch (err) {
-                    log.error(`Fan Active SET error ${err}`);
-                    callback(err)
-                }
             });
+
+        this.heaterCoolerService.getCharacteristic(this.api.Characteristic.RotationSpeed)
+            .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
+                
+            })
+            .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
+                
+            });
+
+        // this.dehumidifierService = new this.api.hap.Service.HumidifierDehumidifier(this.name);
+        // this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.Active)
+        //     .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
+        //         log.info("HumidifierDehumidifier Active GET");
+
+        //         try {
+        //             let result = await this.fetchRemoteDevice(["acState"]);
+        //             let acState = result.acState;
+
+        //             let on = acState.on && acState.mode == "dry";
+        //             callback(undefined, on);
+        //         }
+        //         catch (err) {
+        //             log.error(`Fan Active GET error ${err}`);
+        //             callback(err)
+        //         }
+        //     })
+        //     .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
+        //         log.info(`HumidifierDehumidifier Active SET ${value}`);
+
+        //         try {
+        //             if (value == this.api.hap.Characteristic.Active.ACTIVE) {
+        //                 await this.patchRemoteDevice("mode", "dry");
+        //             }
+
+        //             await this.patchRemoteDevice("on", value == this.api.hap.Characteristic.Active.ACTIVE ? true : false)
+
+        //             // TODO notify that the other services are now Active: false
+                    
+        //             callback()
+        //         }
+        //         catch (err) {
+        //             log.error(`HumidifierDehumidifier Active SET error ${err}`);
+        //             callback(err)
+        //         }
+        //     });
+
+        // this.fanService = new this.api.hap.Service.Fanv2(this.name);
+        // this.fanService.getCharacteristic(this.api.hap.Characteristic.Active)
+        //     .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
+        //         log.info("Fan Active GET");
+
+        //         try {
+        //             let result = await this.fetchRemoteDevice(["acState"]);
+        //             let acState = result.acState;
+
+        //             let on = acState.on && acState.mode == "fan";
+        //             callback(undefined, on);
+        //         }
+        //         catch (err) {
+        //             log.error(`Fan Active GET error ${err}`);
+        //             callback(err)
+        //         }
+        //     })
+        //     .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
+        //         log.info(`Fan Active SET ${value}`);
+
+        //         try {
+        //             if (value == this.api.hap.Characteristic.Active.ACTIVE) {
+        //                 await this.patchRemoteDevice("mode", "fan");
+        //             }
+
+        //             await this.patchRemoteDevice("on", value == this.api.hap.Characteristic.Active.ACTIVE ? true : false)
+
+        //             // TODO notify that the other services are now Active: false
+                    
+        //             callback()
+        //         }
+        //         catch (err) {
+        //             log.error(`Fan Active SET error ${err}`);
+        //             callback(err)
+        //         }
+        //     });
 
         log.info("AC finished initializing!");
     }
