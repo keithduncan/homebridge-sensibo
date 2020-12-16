@@ -66,24 +66,28 @@ class Sensibo implements AccessoryPlugin {
                 log.info(`HeaterCooler Active SET ${value}`);
 
                 try {
+                    let result = await this.fetchRemoteDevice(["acState"]);
+                    let acState = result.acState;
+
+                    let on = acState.on && (acState.mode == "heat" || acState.mode == "cool");
+
                     // Becoming active
                     if (value == this.api.hap.Characteristic.Active.ACTIVE) {
-                        await this.patchRemoteDevice("mode", "cool");
-                        await this.patchRemoteDevice("on", true);
+                        // Only process an Active: true if we're 'off'
 
-                        // Notify the other services that they are now Active: false
-                        this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.Active)
-                            .updateValue(false);
-                        this.fanService.getCharacteristic(this.api.hap.Characteristic.Active)
-                            .updateValue(false);
+                        if (!on) {
+                            await this.patchRemoteDevice("mode", "cool");
+                            await this.patchRemoteDevice("on", true);
+
+                            // Notify the other services that they are now Active: false
+                            this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.Active)
+                                .updateValue(false);
+                            this.fanService.getCharacteristic(this.api.hap.Characteristic.Active)
+                                .updateValue(false);
+                        }
                     } else {
                         // Only allow an Active: false to turn off the device
                         // if the device is actually in heater cooler mode.
-
-                        let result = await this.fetchRemoteDevice(["acState"]);
-                        let acState = result.acState;
-
-                        let on = acState.on && (acState.mode == "heat" || acState.mode == "cool");
 
                         if (on) {
                             await this.patchRemoteDevice("on", false);
