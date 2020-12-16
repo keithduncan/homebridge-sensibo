@@ -451,7 +451,7 @@ class Sensibo implements AccessoryPlugin {
 
         this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.SwingMode)
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
-                log.info("HeaterCooler SwingMode GET");
+                log.info("HumidifierDehumidifier SwingMode GET");
 
                 try {
                     let result = await this.fetchRemoteDevice(["acState"]);
@@ -462,12 +462,12 @@ class Sensibo implements AccessoryPlugin {
                     callback(undefined, swing ? this.api.hap.Characteristic.SwingMode.SWING_ENABLED : this.api.hap.Characteristic.SwingMode.SWING_DISABLED);
                 }
                 catch (err) {
-                    log.error(`HeaterCooler SwingMode GET error ${err}`);
+                    log.error(`HumidifierDehumidifier SwingMode GET error ${err}`);
                     callback(err)
                 }
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                log.info(`HeaterCooler SwingMode SET ${value}`);
+                log.info(`HumidifierDehumidifier SwingMode SET ${value}`);
 
                 let swing = value == this.api.hap.Characteristic.SwingMode.SWING_ENABLED ? "rangeFull" : "stopped";
 
@@ -478,7 +478,7 @@ class Sensibo implements AccessoryPlugin {
                     callback()
                 }
                 catch (err) {
-                    log.error(`HeaterCooler SwingMode SET error ${err}`);
+                    log.error(`HumidifierDehumidifier SwingMode SET error ${err}`);
                     callback(err)
                 }
             });
