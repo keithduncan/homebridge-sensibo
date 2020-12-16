@@ -335,7 +335,7 @@ class Sensibo implements AccessoryPlugin {
                         return
                     }
 
-                    await this.patchRemoteDevice("fanLevel", this.fanLevelForRotationSpeed(value  as number))
+                    await this.patchRemoteDevice("fanLevel", this.fanLevelForRotationSpeed(value as number))
 
                     callback()
                 }
