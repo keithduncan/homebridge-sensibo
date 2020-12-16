@@ -315,12 +315,34 @@ class Sensibo implements AccessoryPlugin {
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
                 log.info("HeaterCooler RotationSpeed GET");
 
-                callback(undefined, 0)
+                try {
+                    let result = await this.fetchRemoteDevice(["acState"]);
+                    let acState = result.acState;
+
+                    callback(undefined, this.getRotationSpeedForFanLevel(acState.fanLevel));
+                }
+                catch (err) {
+                    log.error(`HeaterCooler RotationSpeed GET error ${err}`);
+                    callback(err)
+                }
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
                 log.info(`HeaterCooler RotationSpeed SET ${value}`);
 
-                callback()
+                try {
+                    if (value == 0) {
+                        callback();
+                        return
+                    }
+
+                    await this.patchRemoteDevice("fanLevel", this.fanLevelForRotationSpeed(value  as number))
+
+                    callback()
+                }
+                catch (err) {
+                    log.error(`HeaterCooler RotationSpeed SET error ${err}`)
+                    callback(err)
+                }
             });
 
         this.dehumidifierService = new this.api.hap.Service.HumidifierDehumidifier("Dehumidifier");
@@ -559,12 +581,34 @@ class Sensibo implements AccessoryPlugin {
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
                 log.info("Fan RotationSpeed GET");
 
-                callback(undefined, 0)
+                try {
+                    let result = await this.fetchRemoteDevice(["acState"]);
+                    let acState = result.acState;
+
+                    callback(undefined, this.getRotationSpeedForFanLevel(acState.fanLevel));
+                }
+                catch (err) {
+                    log.error(`Fan RotationSpeed GET error ${err}`);
+                    callback(err)
+                }
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
                 log.info(`Fan RotationSpeed SET ${value}`);
 
-                callback()
+                try {
+                    if (value == 0) {
+                        callback();
+                        return
+                    }
+
+                    await this.patchRemoteDevice("fanLevel", this.fanLevelForRotationSpeed(value as number))
+
+                    callback()
+                }
+                catch (err) {
+                    log.error(`Fan RotationSpeed SET error ${err}`)
+                    callback(err)
+                }
             });
 
         log.info("AC finished initializing!");
@@ -589,6 +633,40 @@ class Sensibo implements AccessoryPlugin {
             this.dehumidifierService,
             this.fanService,
         ];
+    }
+
+    getRotationSpeedForFanLevel(level: string): number {
+        switch (level) {
+            case "low":
+                return 1;
+            case "medium_low":
+                return 2;
+            case "medium":
+                return 3;
+            case "medium_high":
+                return 4;
+            case "high":
+                return 5;
+            default:
+                return 5;
+        }
+    }
+
+    fanLevelForRotationSpeed(speed: number): string {
+        switch (speed) {
+            case 1:
+                return "low";
+            case 2:
+                return "medium_low";
+            case 3:
+                return "medium";
+            case 4:
+                return "medium_high";
+            case 5:
+                return "high";
+            default:
+                throw `Unknown speed for fan level ${speed}`
+        }
     }
 
     // TODO make this cache for 5s and invalidate on updateRemoteDevice or patchRemoteDevice
