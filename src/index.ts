@@ -295,6 +295,11 @@ class Sensibo implements AccessoryPlugin {
             });
 
         this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.RotationSpeed)
+            .setProps({
+                minValue: 0,
+                maxValue: 100,
+                minStep: 20, // 0 + 5 increments
+            })
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
                 log.info("HeaterCooler RotationSpeed GET");
 
@@ -532,6 +537,11 @@ class Sensibo implements AccessoryPlugin {
             });
 
         this.fanService.getCharacteristic(this.api.hap.Characteristic.RotationSpeed)
+            .setProps({
+                minValue: 0,
+                maxValue: 100,
+                minStep: 20, // 0 + 5 increments
+            })
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
                 log.info("Fan RotationSpeed GET");
 
