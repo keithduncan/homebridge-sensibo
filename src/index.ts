@@ -69,7 +69,7 @@ class Sensibo implements AccessoryPlugin {
                     // Becoming active
                     if (value == this.api.hap.Characteristic.Active.ACTIVE) {
                         await this.patchRemoteDevice("mode", "cool");
-                        await this.patchRemoteDevice("on", value == this.api.hap.Characteristic.Active.ACTIVE ? true : false)
+                        await this.patchRemoteDevice("on", true);
 
                         // Notify the other services that they are now Active: false
                         this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.Active)
@@ -330,7 +330,7 @@ class Sensibo implements AccessoryPlugin {
                     // Becoming active
                     if (value == this.api.hap.Characteristic.Active.ACTIVE) {
                         await this.patchRemoteDevice("mode", "dry");
-                        await this.patchRemoteDevice("on", value == this.api.hap.Characteristic.Active.ACTIVE ? true : false)
+                        await this.patchRemoteDevice("on", true);
 
                         // Notify the other services that they are now Active: false
                         this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.Active)
@@ -480,7 +480,7 @@ class Sensibo implements AccessoryPlugin {
                     // Becoming active
                     if (value == this.api.hap.Characteristic.Active.ACTIVE) {
                         await this.patchRemoteDevice("mode", "fan");
-                        await this.patchRemoteDevice("on", value == this.api.hap.Characteristic.Active.ACTIVE ? true : false)
+                        await this.patchRemoteDevice("on", true)
 
                         // Notify the other services that they are now Active: false
                         this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.Active)
