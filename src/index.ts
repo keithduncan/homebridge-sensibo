@@ -444,18 +444,6 @@ class Sensibo implements AccessoryPlugin {
                 }
             });
 
-        this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.RotationSpeed)
-            .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
-                log.info("HumidifierDehumidifier RotationSpeed GET");
-
-                callback(undefined, 0)
-            })
-            .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                log.info("HumidifierDehumidifier RotationSpeed SET");
-
-                callback()
-            });
-
         this.fanService = new this.api.hap.Service.Fanv2("Fan");
         this.fanService.getCharacteristic(this.api.hap.Characteristic.Active)
             .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
