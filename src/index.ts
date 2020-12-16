@@ -288,7 +288,7 @@ class Sensibo implements AccessoryPlugin {
                 }
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                log.info("HeaterCooler SwingMode SET");
+                log.info(`HeaterCooler SwingMode SET ${value}`);
 
                 let swing = value == this.api.hap.Characteristic.SwingMode.SWING_ENABLED ? "rangeFull" : "stopped";
 
@@ -318,7 +318,7 @@ class Sensibo implements AccessoryPlugin {
                 callback(undefined, 0)
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                log.info("HeaterCooler RotationSpeed SET");
+                log.info(`HeaterCooler RotationSpeed SET ${value}`);
 
                 callback()
             });
@@ -422,7 +422,7 @@ class Sensibo implements AccessoryPlugin {
                 callback(undefined, this.api.hap.Characteristic.TargetHumidifierDehumidifierState.DEHUMIDIFIER)
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                log.info("HumidifierDehumidifier TargetHumidifierDehumidifierState SET");
+                log.info(`HumidifierDehumidifier TargetHumidifierDehumidifierState SET ${value}`);
 
                 callback()
             });
@@ -445,7 +445,7 @@ class Sensibo implements AccessoryPlugin {
                 }
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                log.info("HeaterCooler SwingMode SET");
+                log.info(`HeaterCooler SwingMode SET ${value}`);
 
                 let swing = value == this.api.hap.Characteristic.SwingMode.SWING_ENABLED ? "rangeFull" : "stopped";
 
@@ -532,7 +532,7 @@ class Sensibo implements AccessoryPlugin {
                 }
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                log.info("HeaterCooler SwingMode SET");
+                log.info(`HeaterCooler SwingMode SET ${value}`);
 
                 let swing = value == this.api.hap.Characteristic.SwingMode.SWING_ENABLED ? "rangeFull" : "stopped";
 
@@ -562,7 +562,7 @@ class Sensibo implements AccessoryPlugin {
                 callback(undefined, 0)
             })
             .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-                log.info("Fan RotationSpeed SET");
+                log.info(`Fan RotationSpeed SET ${value}`);
 
                 callback()
             });
@@ -598,7 +598,7 @@ class Sensibo implements AccessoryPlugin {
             apiFields = fields.join(",");
         }
         const response = await got(`https://home.sensibo.com/api/v2/pods/${this.id}?apiKey=${this.apiKey}&fields=${apiFields}`);
-        this.log.info("GET /api/v2/pods/${this.id} Response: " + response.body);
+        this.log.info(`GET /api/v2/pods/${this.id} Response: ` + response.body);
 
         let json = JSON.parse(response.body);
         if (json.status != "success") {
@@ -617,7 +617,7 @@ class Sensibo implements AccessoryPlugin {
             method: 'POST',
             body: body
         });
-        this.log.info("POST /api/v2/pods/${this.id}/acStates Response: " + response.body);
+        this.log.info(`POST /api/v2/pods/${this.id}/acStates Response: ` + response.body);
 
         let json = JSON.parse(response.body);
         if (json.status != "success") {
@@ -636,7 +636,7 @@ class Sensibo implements AccessoryPlugin {
             method: 'PATCH',
             body: body
         });
-        this.log.info("PATCH /api/v2/pods/${this.id}/acStates/${field} Response: " + response.body);
+        this.log.info(`PATCH /api/v2/pods/${this.id}/acStates/${field} Response: ` + response.body);
 
         let json = JSON.parse(response.body);
         if (json.status != "success") {
