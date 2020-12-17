@@ -36,6 +36,8 @@ class Sensibo implements AccessoryPlugin {
     private readonly dehumidifierService: Service;
     private readonly fanService: Service;
 
+    private readonly measurementsTimer: any;
+
     constructor(log: Logging, config: AccessoryConfig, api: API) {
         this.log = log;
         this.name = config.name;
@@ -648,6 +650,24 @@ class Sensibo implements AccessoryPlugin {
                     callback(err)
                 }
             });
+
+        this.measurementsTimer = setInterval(async () => {
+            log.info(`Refreshing temperature and humidity`)
+
+            let result = await this.fetchRemoteDevice(["measurements"]);
+            
+            let temperature = result.measurements.temperature;
+            if (temperature != undefined) {
+                this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.CurrentTemperature)
+                    .updateValue(temperature);
+            }
+
+            let humidity = result.measurements.humidity;
+            if (humidity != undefined) {
+                this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.CurrentRelativeHumidity)
+                    .updateValue(humidity);
+            }
+        }, 60_000);
 
         log.info("AC finished initializing!");
     }
