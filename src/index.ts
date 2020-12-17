@@ -29,6 +29,8 @@ class Sensibo implements AccessoryPlugin {
     private readonly apiKey: string;
     private readonly id: string;
 
+    private thresholdTemperature: number
+
     private readonly informationService: Service;
     private readonly heaterCoolerService: Service;
     private readonly dehumidifierService: Service;
@@ -41,6 +43,9 @@ class Sensibo implements AccessoryPlugin {
 
         this.apiKey = config.apiKey;
         this.id = config.id;
+
+        this.thresholdTemperature = 24.0;
+
         this.informationService = new this.api.hap.Service.AccessoryInformation()
             .setCharacteristic(this.api.hap.Characteristic.Manufacturer, "Sensibo")
             .setCharacteristic(this.api.hap.Characteristic.Model, "Sensibo Sky");
@@ -223,8 +228,12 @@ class Sensibo implements AccessoryPlugin {
                 try {
                     let result = await this.fetchRemoteDevice(["acState"]);
 
+                    var targetTemperature = result.acState.targetTemperature;
+
                     // Can be undefined when in fan or dry mode
-                    let targetTemperature = result.acState.targetTemperature;
+                    if (targetTemperature == undefined) {
+                        targetTemperature = this.thresholdTemperature
+                    }
 
                     callback(undefined, targetTemperature)
                 }
@@ -237,6 +246,7 @@ class Sensibo implements AccessoryPlugin {
                 log.info(`HeaterCooler CoolingThresholdTemperature SET ${value}`);
 
                 try {
+                    this.thresholdTemperature = value as number;
                     let result = await this.patchRemoteDevice("targetTemperature", value);
                     callback()
                 }
@@ -258,8 +268,12 @@ class Sensibo implements AccessoryPlugin {
                 try {
                     let result = await this.fetchRemoteDevice(["acState"]);
 
+                    var targetTemperature = result.acState.targetTemperature;
+
                     // Can be undefined when in fan or dry mode
-                    let targetTemperature = result.acState.targetTemperature;
+                    if (targetTemperature == undefined) {
+                        targetTemperature = this.thresholdTemperature
+                    }
 
                     callback(undefined, targetTemperature)
                 }
@@ -272,6 +286,7 @@ class Sensibo implements AccessoryPlugin {
                 log.info(`HeaterCooler HeatingThresholdTemperature SET ${value}`);
 
                 try {
+                    this.thresholdTemperature = value as number;
                     let result = await this.patchRemoteDevice("targetTemperature", value);
                     callback()
                 }
