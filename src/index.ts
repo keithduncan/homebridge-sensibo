@@ -222,7 +222,11 @@ class Sensibo implements AccessoryPlugin {
 
                 try {
                     let result = await this.fetchRemoteDevice(["acState"]);
-                    callback(undefined, result.acState.targetTemperature)
+
+                    // Can be undefined when in fan or dry mode
+                    let targetTemperature = result.acState.targetTemperature;
+
+                    callback(undefined, targetTemperature)
                 }
                 catch (err) {
                     log.error(`HeaterCooler CoolingThresholdTemperature SET error ${err}`);
@@ -253,7 +257,11 @@ class Sensibo implements AccessoryPlugin {
 
                 try {
                     let result = await this.fetchRemoteDevice(["acState"]);
-                    callback(undefined, result.acState.targetTemperature)
+
+                    // Can be undefined when in fan or dry mode
+                    let targetTemperature = result.acState.targetTemperature;
+
+                    callback(undefined, targetTemperature)
                 }
                 catch (err) {
                     log.error(`HeaterCooler HeatingThresholdTemperature SET error ${err}`);
