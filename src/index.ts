@@ -83,6 +83,7 @@ class Sensibo implements AccessoryPlugin {
                         // Only process an Active: true if we're 'off'
 
                         if (!on) {
+                            // TODO this is causing issues when activating and setting to heat immediately?
                             await this.patchRemoteDevice("mode", "cool");
                             await this.patchRemoteDevice("on", true);
 
