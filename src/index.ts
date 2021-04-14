@@ -202,15 +202,23 @@ class Sensibo implements AccessoryPlugin {
 
                 try {
                     let mode;
+                    let state;
                     if (value == this.api.hap.Characteristic.TargetHeaterCoolerState.HEAT) {
                         mode = "heat";
+                        state = this.api.hap.Characteristic.CurrentHeaterCoolerState.HEATING;
                     } else if (value == this.api.hap.Characteristic.TargetHeaterCoolerState.COOL) {
                         mode = "cool";
+                        state = this.api.hap.Characteristic.CurrentHeaterCoolerState.COOLING;
                     } else {
                         throw `Unknown mode ${value}`
                     }
 
                     let result = await this.patchRemoteDevice("mode", mode);
+
+                    // Notify that the readonly this.api.hap.Characteristic.CurrentHeaterCoolerState now matches the mode we set
+                    this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.CurrentHeaterCoolerState)
+                        .updateValue(state);
+
                     callback()
                 }
                 catch (err) {
