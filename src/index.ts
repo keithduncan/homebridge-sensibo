@@ -83,15 +83,7 @@ class Sensibo implements AccessoryPlugin {
                         // Only process an Active: true if we're 'off'
 
                         if (!on) {
-                            // TODO this is causing issues when activating and setting to heat immediately?
-                            await this.patchRemoteDevice("mode", "cool");
                             await this.patchRemoteDevice("on", true);
-
-                            // Notify that this service has changed
-                            this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.CurrentHeaterCoolerState)
-                                .updateValue(this.api.hap.Characteristic.CurrentHeaterCoolerState.COOLING);
-                            this.heaterCoolerService.getCharacteristic(this.api.hap.Characteristic.TargetHeaterCoolerState)
-                                .updateValue(this.api.hap.Characteristic.TargetHeaterCoolerState.COOL);
 
                             // Notify the other services that they are now Active: false
                             this.dehumidifierService.getCharacteristic(this.api.hap.Characteristic.Active)
