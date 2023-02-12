@@ -29,7 +29,7 @@
     "url": "http://github.com/keithduncan/homebridge-sensibo/issues"
   },
   "dependencies": {
-    "got": "^11.5.0"
+    "got": "^12.5.3"
   },
   "devDependencies": {
     "@types/node": "10.17.19",
